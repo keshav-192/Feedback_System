@@ -1,0 +1,114 @@
+/* css/base.css - Global Styles */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
+:root {
+  --primary-color: #b32b2b;
+  --primary-hover: #902222;
+  --primary-light: rgba(179, 43, 43, 0.06);
+  --bg-color: #f8fafc;
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --border-color: #e2e8f0;
+  --input-border: #cbd5e1;
+  --error-color: #ef4444;
+
+  --font-family: "Roboto", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+}
+
+/* Base Header Styles */
+.site-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.banner-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.vignan-logo {
+  height: clamp(32px, 5vw, 64px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.iqac-logo {
+  height: clamp(32px, 5vw, 64px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Mobile Header Fixes */
+@media (max-width: 768px) {
+  .site-header .banner-flex {
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center;
+    gap: 16px !important;
+    width: 100%;
+  }
+
+  .site-header .vignan-logo,
+  .site-header .iqac-logo {
+    height: auto !important;
+    max-height: 50px !important;
+    max-width: 48% !important;
+    object-fit: contain;
+  }
+}
+
+/* Base Buttons */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-color);
+}

@@ -1,0 +1,1975 @@
+[
+    {
+        "group_name": "5-Point Quality Scale",
+        "options": [
+            {
+                "label": "Excellent",
+                "weight": 5
+            },
+            {
+                "label": "Good",
+                "weight": 4
+            },
+            {
+                "label": "Average",
+                "weight": 3
+            },
+            {
+                "label": "Below Average",
+                "weight": 2
+            },
+            {
+                "label": "Poor",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_001"
+    },
+    {
+        "group_id": "opt_grp_002",
+        "group_name": "5-Point Agreement Scale",
+        "options": [
+            {
+                "label": "Strongly Agree",
+                "weight": 5
+            },
+            {
+                "label": "Agree",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Disagree",
+                "weight": 2
+            },
+            {
+                "label": "Strongly Disagree",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_003",
+        "group_name": "5-Point Quality Scale (Satisfactory)",
+        "options": [
+            {
+                "label": "Excellent",
+                "weight": 5
+            },
+            {
+                "label": "Very Good",
+                "weight": 4
+            },
+            {
+                "label": "Good",
+                "weight": 3
+            },
+            {
+                "label": "Satisfactory",
+                "weight": 2
+            },
+            {
+                "label": "Poor",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_004",
+        "group_name": "4-Point Effectiveness Scale",
+        "options": [
+            {
+                "label": "Highly Effective",
+                "weight": 4
+            },
+            {
+                "label": "Effective",
+                "weight": 3
+            },
+            {
+                "label": "Moderately Effective",
+                "weight": 2
+            },
+            {
+                "label": "Ineffective",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_005",
+        "group_name": "5-Point Satisfaction Scale",
+        "options": [
+            {
+                "label": "Very Satisfied",
+                "weight": 5
+            },
+            {
+                "label": "Satisfied",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Dissatisfied",
+                "weight": 2
+            },
+            {
+                "label": "Very Dissatisfied",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_006",
+        "group_name": "4-Point Satisfaction Scale",
+        "options": [
+            {
+                "label": "Very Satisfied",
+                "weight": 4
+            },
+            {
+                "label": "Satisfied",
+                "weight": 3
+            },
+            {
+                "label": "Somewhat Satisfied",
+                "weight": 2
+            },
+            {
+                "label": "Not Satisfied",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_007",
+        "group_name": "4-Point Security Scale",
+        "options": [
+            {
+                "label": "Very Secure",
+                "weight": 4
+            },
+            {
+                "label": "Secure",
+                "weight": 3
+            },
+            {
+                "label": "Moderately Secure",
+                "weight": 2
+            },
+            {
+                "label": "Insecure",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_008",
+        "group_name": "Binary Yes/No",
+        "options": [
+            {
+                "label": "Yes",
+                "weight": 2
+            },
+            {
+                "label": "No",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_009",
+        "group_name": "5-Point Availability Scale",
+        "options": [
+            {
+                "label": "Always Available",
+                "weight": 5
+            },
+            {
+                "label": "Mostly Available",
+                "weight": 4
+            },
+            {
+                "label": "Sometimes Available",
+                "weight": 3
+            },
+            {
+                "label": "Limited Availability",
+                "weight": 2
+            },
+            {
+                "label": "Not Available",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_010",
+        "group_name": "5-Point Frequency Scale",
+        "options": [
+            {
+                "label": "Frequently",
+                "weight": 5
+            },
+            {
+                "label": "Often",
+                "weight": 4
+            },
+            {
+                "label": "Sometimes",
+                "weight": 3
+            },
+            {
+                "label": "Rarely",
+                "weight": 2
+            },
+            {
+                "label": "Never",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_011",
+        "group_name": "Suggestion",
+        "type": "TEXTAREA"
+    },
+    {
+        "group_id": "opt_grp_012",
+        "group_name": "Program",
+        "options": [
+            {
+                "label": "PhD",
+                "weight": 12
+            },
+            {
+                "label": "M.Tech",
+                "weight": 11
+            },
+            {
+                "label": "MSc",
+                "weight": 10
+            },
+            {
+                "label": "MBA",
+                "weight": 9
+            },
+            {
+                "label": "B.Tech",
+                "weight": 8
+            },
+            {
+                "label": "BBA",
+                "weight": 7
+            },
+            {
+                "label": "BSc",
+                "weight": 6
+            },
+            {
+                "label": "Law",
+                "weight": 5
+            },
+            {
+                "label": "Diploma",
+                "weight": 4
+            },
+            {
+                "label": "Pharmacy",
+                "weight": 3
+            },
+            {
+                "label": "MCA",
+                "weight": 2
+            },
+            {
+                "label": "BCA",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_013",
+        "group_name": "Commute Mode",
+        "options": [
+            {
+                "label": "Walk",
+                "weight": 5
+            },
+            {
+                "label": "Bicycle",
+                "weight": 4
+            },
+            {
+                "label": "Public Transportation",
+                "weight": 3
+            },
+            {
+                "label": "Personal Vehicle",
+                "weight": 2
+            },
+            {
+                "label": "Institution Transport Facility",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_014",
+        "group_name": "Places",
+        "options": [
+            {
+                "label": "Tenali",
+                "weight": 13
+            },
+            {
+                "label": "Guntur",
+                "weight": 12
+            },
+            {
+                "label": "Vijayawada",
+                "weight": 11
+            },
+            {
+                "label": "Mangalagiri",
+                "weight": 10
+            },
+            {
+                "label": "Ponnuru",
+                "weight": 9
+            },
+            {
+                "label": "Bapatla",
+                "weight": 8
+            },
+            {
+                "label": "Repalle",
+                "weight": 7
+            },
+            {
+                "label": "Kolluru",
+                "weight": 6
+            },
+            {
+                "label": "Bhattiprolu",
+                "weight": 5
+            },
+            {
+                "label": "Kollipara",
+                "weight": 4
+            },
+            {
+                "label": "Chilakaluripet",
+                "weight": 3
+            },
+            {
+                "label": "Prattipadu",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_015",
+        "group_name": "Transport Issues",
+        "options": [
+            {
+                "label": "Over crowded",
+                "weight": 5
+            },
+            {
+                "label": "Bus Delay",
+                "weight": 4
+            },
+            {
+                "label": "Moving Before Scheduled time",
+                "weight": 3
+            },
+            {
+                "label": "Allowing Other Students (Non Payers)",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_016",
+        "group_name": "Year",
+        "options": [
+            {
+                "label": "I",
+                "weight": 4
+            },
+            {
+                "label": "II",
+                "weight": 3
+            },
+            {
+                "label": "III",
+                "weight": 2
+            },
+            {
+                "label": "IV",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_017",
+        "group_name": "5-Point Affordability Scale",
+        "options": [
+            {
+                "label": "Very affordable",
+                "weight": 5
+            },
+            {
+                "label": "Affordable",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Expensive",
+                "weight": 2
+            },
+            {
+                "label": "Very expensive",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_018",
+        "group_name": "Department",
+        "options": [
+            {
+                "label": "Mechanical Engineering",
+                "weight": 25
+            },
+            {
+                "label": "Chemical Engineering",
+                "weight": 24
+            },
+            {
+                "label": "Civil Engineering",
+                "weight": 23
+            },
+            {
+                "label": "Textile Technology",
+                "weight": 22
+            },
+            {
+                "label": "Electronics and Communication Engineering",
+                "weight": 21
+            },
+            {
+                "label": "Biomedical Engineering",
+                "weight": 20
+            },
+            {
+                "label": "Electrical and Electronics Engineering",
+                "weight": 19
+            },
+            {
+                "label": "Computer Science and Engineering",
+                "weight": 18
+            },
+            {
+                "label": "Advanced Computer Science and Engineering",
+                "weight": 17
+            },
+            {
+                "label": "Information Technology",
+                "weight": 16
+            },
+            {
+                "label": "Computer Applications",
+                "weight": 15
+            },
+            {
+                "label": "Biotechnology",
+                "weight": 14
+            },
+            {
+                "label": "Pharmaceutical Sciences",
+                "weight": 13
+            },
+            {
+                "label": "Bioinformatics",
+                "weight": 12
+            },
+            {
+                "label": "Department of Management Studies",
+                "weight": 11
+            },
+            {
+                "label": "Institute of Law",
+                "weight": 10
+            },
+            {
+                "label": "Agricultural Engineering",
+                "weight": 9
+            },
+            {
+                "label": "Vignan Institute of Agriculture and Technology",
+                "weight": 8
+            },
+            {
+                "label": "Food Technology",
+                "weight": 7
+            },
+            {
+                "label": "Physics",
+                "weight": 6
+            },
+            {
+                "label": "Chemistry",
+                "weight": 5
+            },
+            {
+                "label": "Mathematics and Statistics",
+                "weight": 4
+            },
+            {
+                "label": "Department of English and Other Indian & Foreign ...",
+                "weight": 3
+            },
+            {
+                "label": "Social Sciences & Humanities",
+                "weight": 2
+            },
+            {
+                "label": "Diploma",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_019",
+        "group_name": "areas",
+        "options": [
+            {
+                "label": "Rural",
+                "weight": 3
+            },
+            {
+                "label": "Semi-Urban",
+                "weight": 2
+            },
+            {
+                "label": "Urban",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_020",
+        "group_name": "Income Range",
+        "options": [
+            {
+                "label": "Below \u20b95 lakh",
+                "weight": 6
+            },
+            {
+                "label": "\u20b95\u201310 lakh",
+                "weight": 5
+            },
+            {
+                "label": "\u20b910\u201315 lakh",
+                "weight": 4
+            },
+            {
+                "label": "\u20b915\u201320 lakh",
+                "weight": 3
+            },
+            {
+                "label": "\u20b920\u201325 lakh",
+                "weight": 2
+            },
+            {
+                "label": "Above \u20b925 lakh",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_021",
+        "group_name": "Qualification",
+        "options": [
+            {
+                "label": "Upto 10th",
+                "weight": 6
+            },
+            {
+                "label": "10 + 2",
+                "weight": 5
+            },
+            {
+                "label": "Diploma",
+                "weight": 4
+            },
+            {
+                "label": "Undergraduate (UG)",
+                "weight": 3
+            },
+            {
+                "label": "Postgraduate (PG)",
+                "weight": 2
+            },
+            {
+                "label": "Ph. D.",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_022",
+        "group_name": "Parent Occupation",
+        "options": [
+            {
+                "label": "Agriculture",
+                "weight": 5
+            },
+            {
+                "label": "Business",
+                "weight": 4
+            },
+            {
+                "label": "Government Employee",
+                "weight": 3
+            },
+            {
+                "label": "Private Sector Employee",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_023",
+        "group_name": "Awareness Information Sources",
+        "options": [
+            {
+                "label": "Relatives",
+                "weight": 14
+            },
+            {
+                "label": "Friends / Peers",
+                "weight": 13
+            },
+            {
+                "label": "Seniors studying at Vignan's",
+                "weight": 12
+            },
+            {
+                "label": "School / Junior College Teachers / Lecturers",
+                "weight": 11
+            },
+            {
+                "label": "Social Media (Instagram, YouTube, Facebook, etc.)",
+                "weight": 10
+            },
+            {
+                "label": "University Official Website",
+                "weight": 9
+            },
+            {
+                "label": "News, Print Media, TV Advertisements",
+                "weight": 8
+            },
+            {
+                "label": "Hoardings / Banners / Posters",
+                "weight": 7
+            },
+            {
+                "label": "Alumni of Vignan's",
+                "weight": 6
+            },
+            {
+                "label": "Educational Consultants / Admission Counsellors",
+                "weight": 5
+            },
+            {
+                "label": "Educational Fairs / School / College Visits",
+                "weight": 4
+            },
+            {
+                "label": "AI Tools (ChatGPT, Google Gemini, etc.)",
+                "weight": 3
+            },
+            {
+                "label": "Campus Visit / Word of Mouth",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_024",
+        "group_name": "5-Point Importance Scale",
+        "options": [
+            {
+                "label": "Very High",
+                "weight": 5
+            },
+            {
+                "label": "High",
+                "weight": 4
+            },
+            {
+                "label": "Moderate",
+                "weight": 3
+            },
+            {
+                "label": "Low",
+                "weight": 2
+            },
+            {
+                "label": "Very Low",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_025",
+        "group_name": "5-Point Familiarity Scale",
+        "options": [
+            {
+                "label": "1 (Not Familiar)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Very Familiar)",
+                "weight": 5
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_026",
+        "group_name": "Colleges Considered Count",
+        "options": [
+            {
+                "label": "Only Vignan / 0-1",
+                "weight": 4
+            },
+            {
+                "label": "2 - 3",
+                "weight": 3
+            },
+            {
+                "label": "4 - 5",
+                "weight": 2
+            },
+            {
+                "label": "More than 5",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_027",
+        "group_name": "Preference Rank",
+        "options": [
+            {
+                "label": "1st Preference",
+                "weight": 4
+            },
+            {
+                "label": "2nd Preference",
+                "weight": 3
+            },
+            {
+                "label": "3rd Preference",
+                "weight": 2
+            },
+            {
+                "label": "4th Preference or lower",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_028",
+        "group_name": "Decision Influencing Factors",
+        "options": [
+            {
+                "label": "Quality Teaching & Academics",
+                "weight": 10
+            },
+            {
+                "label": "Placement Records & Packages",
+                "weight": 9
+            },
+            {
+                "label": "Campus Infrastructure & Facilities",
+                "weight": 8
+            },
+            {
+                "label": "Specific Course / Specialization Offered",
+                "weight": 7
+            },
+            {
+                "label": "Transport Connectivity & Bus Facility",
+                "weight": 6
+            },
+            {
+                "label": "Hostel & Living Facilities",
+                "weight": 5
+            },
+            {
+                "label": "Scholarship / Fee Concession",
+                "weight": 4
+            },
+            {
+                "label": "Campus Discipline & Student Safety",
+                "weight": 3
+            },
+            {
+                "label": "Geographical Location / Proximity",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_029",
+        "group_name": "Branch Selection Reasons",
+        "options": [
+            {
+                "label": "Personal Interest & Passion for the subject",
+                "weight": 6
+            },
+            {
+                "label": "High Placement Opportunities",
+                "weight": 5
+            },
+            {
+                "label": "Future Career Scope & Market Demand",
+                "weight": 4
+            },
+            {
+                "label": "Family Advice & Guidance",
+                "weight": 3
+            },
+            {
+                "label": "Teacher / Mentor Recommendation",
+                "weight": 2
+            },
+            {
+                "label": "Other",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_name": "Academic Year",
+        "options": [
+            {
+                "label": "2026-27",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_030"
+    },
+    {
+        "group_name": "Semester",
+        "options": [
+            {
+                "label": "Semester 1",
+                "weight": 1
+            },
+            {
+                "label": "Semester 2",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_031"
+    },
+    {
+        "group_name": "School",
+        "options": [
+            {
+                "label": "School of Core Engineering",
+                "weight": 1
+            },
+            {
+                "label": "School of Electrical, Electronics and Communication Engineering",
+                "weight": 1
+            },
+            {
+                "label": "School of Computing and Informatics",
+                "weight": 1
+            },
+            {
+                "label": "School of Biotechnology and Pharmaceutical Sciences",
+                "weight": 1
+            },
+            {
+                "label": "School of Law and Management",
+                "weight": 1
+            },
+            {
+                "label": "School of Agri, Food Science and Technology",
+                "weight": 1
+            },
+            {
+                "label": "School of Applied Sciences and Humanities",
+                "weight": 1
+            },
+            {
+                "label": "Directorate of Polytechnic Education",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_032"
+    },
+    {
+        "group_name": "Conducive",
+        "options": [
+            {
+                "label": "Very Conducive",
+                "weight": 5
+            },
+            {
+                "label": "Conducive",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Not Conducive",
+                "weight": 2
+            },
+            {
+                "label": "Not at all Conducive",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_033"
+    },
+    {
+        "group_name": "Classroom Facilities",
+        "options": [
+            {
+                "label": "ICT",
+                "weight": 1
+            },
+            {
+                "label": "Benches",
+                "weight": 1
+            },
+            {
+                "label": "Chairs",
+                "weight": 1
+            },
+            {
+                "label": "Display Boards",
+                "weight": 1
+            },
+            {
+                "label": "Smart TVs",
+                "weight": 1
+            },
+            {
+                "label": "Audio System",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_034"
+    },
+    {
+        "group_id": "opt_grp_035",
+        "group_name": "Updated",
+        "options": [
+            {
+                "label": "Yes, always updated",
+                "weight": 3
+            },
+            {
+                "label": "Yes, mostly updated",
+                "weight": 2
+            },
+            {
+                "label": "No, updates are infrequent",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_036",
+        "group_name": "Helpful",
+        "options": [
+            {
+                "label": "Always Helpful and Responsive",
+                "weight": 5
+            },
+            {
+                "label": "Mostly Helpful and Responsive",
+                "weight": 4
+            },
+            {
+                "label": "Sometimes Unhelpful or Unavailable",
+                "weight": 3
+            },
+            {
+                "label": "Not Very Helpful and Responsive",
+                "weight": 2
+            },
+            {
+                "label": "Not Helpful and Unavailable",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_037",
+        "group_name": "Campus Facilities",
+        "options": [
+            {
+                "label": "Corridors",
+                "weight": 13
+            },
+            {
+                "label": "Roads",
+                "weight": 12
+            },
+            {
+                "label": "Lawns",
+                "weight": 11
+            },
+            {
+                "label": "Restrooms",
+                "weight": 10
+            },
+            {
+                "label": "Lift",
+                "weight": 9
+            },
+            {
+                "label": "Canteen",
+                "weight": 8
+            },
+            {
+                "label": "Gardens",
+                "weight": 7
+            },
+            {
+                "label": "Hostel",
+                "weight": 6
+            },
+            {
+                "label": "Steps",
+                "weight": 5
+            },
+            {
+                "label": "Open Area Theatre",
+                "weight": 4
+            },
+            {
+                "label": "Convocation",
+                "weight": 3
+            },
+            {
+                "label": "Parks",
+                "weight": 2
+            },
+            {
+                "label": "All of the above",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_038",
+        "group_name": "4-Point Satisfaction Scale (Alternative)",
+        "options": [
+            {
+                "label": "Very Satisfied",
+                "weight": 4
+            },
+            {
+                "label": "Satisfied",
+                "weight": 3
+            },
+            {
+                "label": "Dissatisfied",
+                "weight": 2
+            },
+            {
+                "label": "Very Dissatisfied",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_039",
+        "group_name": "4-Point Frequency Scale",
+        "options": [
+            {
+                "label": "Very Often",
+                "weight": 4
+            },
+            {
+                "label": "Often",
+                "weight": 3
+            },
+            {
+                "label": "Rarely",
+                "weight": 2
+            },
+            {
+                "label": "Never",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_040",
+        "group_name": "Improvement Suggestions",
+        "options": [
+            {
+                "label": "Better lighting",
+                "weight": 4
+            },
+            {
+                "label": "Comfortable seating",
+                "weight": 3
+            },
+            {
+                "label": "More storage space",
+                "weight": 2
+            },
+            {
+                "label": "Improved air circulation",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_041",
+        "group_name": "4-Point Frequency Scale (Daily)",
+        "options": [
+            {
+                "label": "Daily",
+                "weight": 4
+            },
+            {
+                "label": "Occasionally",
+                "weight": 3
+            },
+            {
+                "label": "Rarely",
+                "weight": 2
+            },
+            {
+                "label": "Never",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_042",
+        "group_name": "4-Point Quality Scale (Fair/Poor)",
+        "options": [
+            {
+                "label": "Excellent",
+                "weight": 4
+            },
+            {
+                "label": "Good",
+                "weight": 3
+            },
+            {
+                "label": "Fair",
+                "weight": 2
+            },
+            {
+                "label": "Poor",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_043",
+        "group_name": "4-Point Appreciation Scale",
+        "options": [
+            {
+                "label": "Exceptionally",
+                "weight": 4
+            },
+            {
+                "label": "Appreciably",
+                "weight": 3
+            },
+            {
+                "label": "Adequately",
+                "weight": 2
+            },
+            {
+                "label": "Poorly",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_044",
+        "group_name": "4-Point Encouragement Scale",
+        "options": [
+            {
+                "label": "Strongly Encouraged",
+                "weight": 4
+            },
+            {
+                "label": "Encouraged",
+                "weight": 3
+            },
+            {
+                "label": "Some what Encouraged",
+                "weight": 2
+            },
+            {
+                "label": "Not Encouraged",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_045",
+        "group_name": "4-Point Frequency Scale (Very Frequently)",
+        "options": [
+            {
+                "label": "Very Frequently",
+                "weight": 4
+            },
+            {
+                "label": "Frequently",
+                "weight": 3
+            },
+            {
+                "label": "Occasionally",
+                "weight": 2
+            },
+            {
+                "label": "Rarely",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_046",
+        "group_name": "4-Point Importance Scale (Very High/Low)",
+        "options": [
+            {
+                "label": "Very High",
+                "weight": 4
+            },
+            {
+                "label": "High",
+                "weight": 3
+            },
+            {
+                "label": "Moderate",
+                "weight": 2
+            },
+            {
+                "label": "Low",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_047",
+        "group_name": "4-Point Frequency Scale (Always/Rarely)",
+        "options": [
+            {
+                "label": "Always",
+                "weight": 4
+            },
+            {
+                "label": "Often",
+                "weight": 3
+            },
+            {
+                "label": "Sometimes",
+                "weight": 2
+            },
+            {
+                "label": "Rarely",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_048",
+        "group_name": "4-Point Effectiveness Scale (Very Effectively)",
+        "options": [
+            {
+                "label": "Very Effectively",
+                "weight": 4
+            },
+            {
+                "label": "Effectively",
+                "weight": 3
+            },
+            {
+                "label": "Somewhat Effectively",
+                "weight": 2
+            },
+            {
+                "label": "Ineffectively",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_049",
+        "group_name": "4-Point Utilization Scale",
+        "options": [
+            {
+                "label": "Highly Utilized",
+                "weight": 4
+            },
+            {
+                "label": "Utilized",
+                "weight": 3
+            },
+            {
+                "label": "Some what Underutilized",
+                "weight": 2
+            },
+            {
+                "label": "Under Utilized",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_050",
+        "group_name": "4-Point Maintenance Frequency Scale",
+        "options": [
+            {
+                "label": "Daily",
+                "weight": 4
+            },
+            {
+                "label": "Weekly",
+                "weight": 3
+            },
+            {
+                "label": "Monthly",
+                "weight": 2
+            },
+            {
+                "label": "Only when required",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_051",
+        "group_name": "4-Point Response Time Scale",
+        "options": [
+            {
+                "label": "Very Quickly",
+                "weight": 4
+            },
+            {
+                "label": "Quickly",
+                "weight": 3
+            },
+            {
+                "label": "Slowly",
+                "weight": 2
+            },
+            {
+                "label": "Not Addressed",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_052",
+        "group_name": "4-Point Cleaning Frequency Scale",
+        "options": [
+            {
+                "label": "Daily",
+                "weight": 4
+            },
+            {
+                "label": "Weekly",
+                "weight": 3
+            },
+            {
+                "label": "Monthly",
+                "weight": 2
+            },
+            {
+                "label": "Rarely",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_053",
+        "group_name": "5-Point Rating Scale (Poor - Excellent)",
+        "options": [
+            {
+                "label": "1 (Poor)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Excellent)",
+                "weight": 5
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_054",
+        "group_name": "4-Point Rating Scale (Poor - Excellent)",
+        "options": [
+            {
+                "label": "1 (Poor)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4 (Excellent)",
+                "weight": 4
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_055",
+        "group_name": "5-Point Satisfaction Scale (Satisfactory)",
+        "options": [
+            {
+                "label": "5 (Excellent)",
+                "weight": 5
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "1 (Poor)",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_056",
+        "group_name": "5-Point Frequency Scale (Frequently/Never)",
+        "options": [
+            {
+                "label": "5 (Frequently)",
+                "weight": 5
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "1 (Never)",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_name": "3-Point Agreement (Yes/No/Notsure)",
+        "options": [
+            {
+                "label": "Yes",
+                "weight": 3
+            },
+            {
+                "label": "No",
+                "weight": 2
+            },
+            {
+                "label": "Not Sure",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_057"
+    },
+    {
+        "group_id": "opt_grp_058",
+        "group_name": "5-Point Extent Scale (Not at all/Extremely)",
+        "options": [
+            {
+                "label": "1 (Not at all)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Extremely)",
+                "weight": 5
+            }
+        ]
+    },
+    {
+        "group_name": "5-Point Agreement Scale (Strongly agree/ disagree)",
+        "options": [
+            {
+                "label": "1 (Strongly disagree)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Strongly agree)",
+                "weight": 5
+            }
+        ],
+        "group_id": "opt_grp_059"
+    },
+    {
+        "group_id": "opt_grp_060",
+        "group_name": "5-Point Likelihood Scale (Very likely/Improbable)",
+        "options": [
+            {
+                "label": "5 (Very likely)",
+                "weight": 5
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "1 (Highly Improbable)",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_061",
+        "group_name": "5-Point Frequency Scale (Rarely/Always)",
+        "options": [
+            {
+                "label": "1 (Rarely)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Always)",
+                "weight": 5
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_062",
+        "group_name": "5-Point Satisfaction Scale (Very Dissatisfied)",
+        "options": [
+            {
+                "label": "1 (Very Dissatisfied)",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5 (Very Satisfied)",
+                "weight": 5
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_063",
+        "group_name": "5-Point Effectiveness Scale",
+        "options": [
+            {
+                "label": "Very Effective",
+                "weight": 5
+            },
+            {
+                "label": "Effective",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Ineffective",
+                "weight": 2
+            },
+            {
+                "label": "Very Ineffective",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_064",
+        "group_name": "5-Point Usefulness Scale",
+        "options": [
+            {
+                "label": "Very Useful",
+                "weight": 5
+            },
+            {
+                "label": "Useful",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Less Useful",
+                "weight": 2
+            },
+            {
+                "label": "Not Useful",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_065",
+        "group_name": "5-Point Beneficial Scale",
+        "options": [
+            {
+                "label": "Very Beneficial",
+                "weight": 5
+            },
+            {
+                "label": "Beneficial",
+                "weight": 4
+            },
+            {
+                "label": "Neutral",
+                "weight": 3
+            },
+            {
+                "label": "Less Beneficial",
+                "weight": 2
+            },
+            {
+                "label": "Not Beneficial",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_066",
+        "group_name": "Numerical Count (0 to >3)",
+        "options": [
+            {
+                "label": ">3",
+                "weight": 5
+            },
+            {
+                "label": "3",
+                "weight": 4
+            },
+            {
+                "label": "2",
+                "weight": 3
+            },
+            {
+                "label": "1",
+                "weight": 2
+            },
+            {
+                "label": "0",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_id": "opt_grp_067",
+        "group_name": "5-Point Frequency Scale (Daily to Never)",
+        "options": [
+            {
+                "label": "Multiple times a day",
+                "weight": 5
+            },
+            {
+                "label": "Once a day",
+                "weight": 4
+            },
+            {
+                "label": "A few times a week",
+                "weight": 3
+            },
+            {
+                "label": "Rarely",
+                "weight": 2
+            },
+            {
+                "label": "Never",
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "group_name": "4-Point (Definetely/Not at all)",
+        "options": [
+            {
+                "label": "Yes, Definitely",
+                "weight": 4
+            },
+            {
+                "label": "Yes, somewhat",
+                "weight": 3
+            },
+            {
+                "label": "No, Not Really",
+                "weight": 2
+            },
+            {
+                "label": "No, Not at all",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_068"
+    },
+    {
+        "group_name": "4-Point Easy to Difficult",
+        "options": [
+            {
+                "label": "Very Easy",
+                "weight": 4
+            },
+            {
+                "label": "Somewhat Easy",
+                "weight": 3
+            },
+            {
+                "label": "Somewhat Difficult",
+                "weight": 2
+            },
+            {
+                "label": "Very Difficult",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_069"
+    },
+    {
+        "group_name": "checking",
+        "options": [
+            {
+                "label": "hell",
+                "weight": 1
+            },
+            {
+                "label": "heii",
+                "weight": 1
+            },
+            {
+                "label": "how are you",
+                "weight": 1
+            },
+            {
+                "label": "why",
+                "weight": 1
+            },
+            {
+                "label": "new option",
+                "weight": 1
+            },
+            {
+                "label": "check option",
+                "weight": 1
+            },
+            {
+                "label": "Other:",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_071"
+    },
+    {
+        "group_name": "check",
+        "options": [
+            {
+                "label": "hello",
+                "weight": 1
+            },
+            {
+                "label": "Other:",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_072"
+    },
+    {
+        "group_name": "checki",
+        "options": [
+            {
+                "label": "good",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_073"
+    },
+    {
+        "group_name": "10-Point Rating Scale",
+        "options": [
+            {
+                "label": "1",
+                "weight": 1
+            },
+            {
+                "label": "2",
+                "weight": 2
+            },
+            {
+                "label": "3",
+                "weight": 3
+            },
+            {
+                "label": "4",
+                "weight": 4
+            },
+            {
+                "label": "5",
+                "weight": 5
+            },
+            {
+                "label": "6",
+                "weight": 6
+            },
+            {
+                "label": "7",
+                "weight": 7
+            },
+            {
+                "label": "8",
+                "weight": 8
+            },
+            {
+                "label": "9",
+                "weight": 9
+            },
+            {
+                "label": "10",
+                "weight": 10
+            }
+        ],
+        "group_id": "opt_grp_074"
+    }
+]

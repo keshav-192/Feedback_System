@@ -1,0 +1,223 @@
+/* admin/edit_form/edit_form.css */
+/* Inherits largely from new_form.css, but contains specific overrides for the list view */
+
+.forms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  transition: all 0.2s ease;
+}
+
+.form-list-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.form-item-info h4 {
+  margin: 0 0 4px 0;
+  color: var(--text-main);
+  font-size: 16px;
+}
+
+.form-item-info p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.form-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: #def7ec;
+  color: #03543f;
+}
+
+.sortable-ghost {
+  opacity: 0.3 !important;
+  background-color: #f1f5f9 !important;
+  border: 2px dashed var(--primary-color) !important;
+  box-shadow: none !important;
+}
+
+.sortable-drag {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1) !important;
+  transform: scale(1.02) !important;
+  cursor: grabbing !important;
+  z-index: 9999 !important;
+}
+
+.sortable-chosen {
+  background-color: #fafafa;
+}
+
+.status-inactive {
+  background-color: #fde8e8;
+  color: #9b1c1c;
+}
+
+/* Archived Questions Sidebar */
+.archived-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: none;
+}
+
+.archived-sidebar-overlay.open {
+  opacity: 1;
+}
+
+.archived-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  max-width: 90vw;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.archived-sidebar.open {
+  transform: translateX(0);
+}
+
+.archived-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.archived-sidebar-header h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+  font-size: 18px;
+}
+
+.archived-sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.archived-sidebar-body .builder-question-card {
+  margin-bottom: 12px;
+}
+
+.archived-sidebar-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px 20px;
+  font-size: 14px;
+}
+
+.archive-btn-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+}
+
+/* ==========================================================================
+   Dedicated Scrollable Container for Questions (Option B)
+   ========================================================================== */
+.edit-builder-view-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form-title-card {
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 5;
+}
+
+.edit-builder-scroll-area {
+  max-height: calc(100vh - 275px);
+  min-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 8px 16px 2px;
+  margin-bottom: 12px;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Polished Modern Scrollbar */
+.edit-builder-scroll-area::-webkit-scrollbar {
+  width: 7px;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.edit-builder-actions {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .edit-builder-scroll-area {
+    max-height: none;
+    overflow-y: visible;
+  }
+}

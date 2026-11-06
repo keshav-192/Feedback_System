@@ -1,0 +1,221 @@
+/* admin/global_options/global_options.css */
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.option-set-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
+}
+
+.option-set-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.option-set-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.option-set-id {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: monospace;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.option-choices-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-choice-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.option-choice-weight {
+  font-weight: 600;
+  color: var(--primary-color);
+  background: var(--primary-light);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Modal Overlay Styles (reusable) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.choice-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.choice-row input {
+  flex: 1;
+}
+
+.choice-row .weight-input {
+  width: 80px;
+  flex: none;
+}
+
+/* Autocomplete Styles for Global Options */
+.autocomplete-wrapper {
+  position: relative;
+  min-width: 300px;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-md);
+  margin-top: 4px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+}
+
+.autocomplete-dropdown.show {
+  display: block;
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.autocomplete-item-preview {
+  display: none;
+  background: white;
+  border: 1px solid var(--input-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  border-radius: 8px;
+  width: 280px;
+  max-height: 350px;
+  overflow-y: auto;
+  cursor: default;
+  position: fixed;
+  z-index: 200;
+}
+
+/* Sort Toggle Button */
+.btn-sort-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.btn-sort-toggle:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-sort-toggle.active-newest {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+}
+
+.btn-sort-toggle svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}

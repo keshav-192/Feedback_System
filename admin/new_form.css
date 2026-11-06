@@ -1,0 +1,224 @@
+/* Form Builder Styles */
+.builder-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+.builder-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.builder-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-danger-outline {
+  background-color: transparent;
+  color: var(--error-color);
+  border: 1px solid var(--error-color);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-danger-outline:hover {
+  background-color: #fef2f2;
+}
+
+.builder-question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.builder-question-card.sortable-ghost {
+  opacity: 0.3 !important;
+  background-color: #f1f5f9 !important;
+  border: 2px dashed var(--primary-color) !important;
+  box-shadow: none !important;
+}
+
+.sortable-drag {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1) !important;
+  transform: scale(1.02) !important;
+  cursor: grabbing !important;
+  z-index: 9999 !important;
+}
+
+.sortable-chosen {
+  background-color: #fafafa;
+}
+
+.builder-question-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+.question-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.question-inputs-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .question-inputs-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.autocomplete-wrapper {
+  position: relative;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-md);
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  display: none;
+}
+
+.autocomplete-dropdown.show {
+  display: block;
+}
+
+.autocomplete-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.autocomplete-item-preview {
+  display: none;
+  background: white;
+  border: 1px solid var(--input-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  border-radius: 8px;
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+  cursor: default;
+}
+
+/* Compulsory Question State */
+.builder-question-card.compulsory {
+  border-left: 4px solid var(--primary-color);
+  background: #ffffff;
+}
+
+/* Toggle Switch CSS */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+.toggle-slider:before {
+  position: absolute;
+  content: '';
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .toggle-slider {
+  background-color: var(--primary-color);
+}
+input:disabled + .toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}

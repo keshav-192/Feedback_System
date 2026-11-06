@@ -1,0 +1,7 @@
+# Disable Directory Browsing
+Options -Indexes
+
+# Prevent PHP execution in this directory (extra security)
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps)$">
+    Deny from all
+</FilesMatch>

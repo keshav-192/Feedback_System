@@ -1,0 +1,14 @@
+# Environment & Logs
+logs/admin/*.log
+logs/user/*.log
+scratch/
+
+# Uploads
+uploads/qr_codes/*
+!uploads/qr_codes/.gitkeep
+!uploads/.htaccess
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.tmp
