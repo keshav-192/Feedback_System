@@ -39,6 +39,10 @@ $newOptionSet = [
     'group_name' => trim($data['group_name'])
 ];
 
+if (!empty($data['parent_group'])) {
+    $newOptionSet['parent_group'] = trim($data['parent_group']);
+}
+
 if (!empty($data['options']) && is_array($data['options'])) {
     $newOptionSet['options'] = [];
     foreach ($data['options'] as $choice) {
@@ -48,10 +52,19 @@ if (!empty($data['options']) && is_array($data['options'])) {
                 $weightVal = 1;
             }
             
-            $newOptionSet['options'][] = [
+            $optObj = [
                 'label' => trim($choice['label']),
                 'weight' => $weightVal
             ];
+
+            if (isset($choice['parents']) && is_array($choice['parents'])) {
+                $cleanParents = array_values(array_filter(array_map('trim', $choice['parents'])));
+                if (!empty($cleanParents)) {
+                    $optObj['parents'] = $cleanParents;
+                }
+            }
+
+            $newOptionSet['options'][] = $optObj;
         }
     }
 } else {
@@ -69,6 +82,15 @@ if (!empty($data['group_id'])) {
             // CRITICAL: Preserve the original group_name to prevent breaking existing forms analytics
             $newOptionSet['group_name'] = $opt['group_name'];
             $oldOptions = isset($opt['options']) && is_array($opt['options']) ? $opt['options'] : [];
+            if (isset($data['parent_group'])) {
+                if (trim($data['parent_group']) !== '') {
+                    $newOptionSet['parent_group'] = trim($data['parent_group']);
+                } else {
+                    unset($newOptionSet['parent_group']);
+                }
+            } elseif (isset($opt['parent_group'])) {
+                $newOptionSet['parent_group'] = $opt['parent_group'];
+            }
             $optionsArray[$key] = $newOptionSet;
             $isUpdate = true;
             break;

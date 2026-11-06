@@ -13,6 +13,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const choicesList = document.getElementById("new-opt-choices-list");
   const addChoiceBtn = document.getElementById("add-choice-row-btn");
   const addOtherChoiceBtn = document.getElementById("add-other-choice-btn");
+
+  // Bucket Elements
+  const parentGroupSelect = document.getElementById("opt-parent-group");
+  const flatChoicesContainer = document.getElementById("flat-choices-container");
+  const bucketChoicesContainer = document.getElementById("bucket-choices-container");
+  const bucketsList = document.getElementById("buckets-list");
+  const addBucketBtn = document.getElementById("add-bucket-btn");
   
   const viewModal = document.getElementById("view-options-modal");
   const closeViewBtn = document.getElementById("close-view-options-btn");
@@ -274,11 +281,16 @@ document.addEventListener("DOMContentLoaded", function() {
         `;
       }
       
+      const parentBadge = opt.parent_group ? `<span class="parent-group-pill">↳ Depends on: ${opt.parent_group}</span>` : '';
+
       card.innerHTML = `
         <div class="option-set-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
           <div>
             <div class="option-set-title">${opt.group_name}</div>
-            <span class="option-set-id">${opt.group_id}</span>
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 3px;">
+              <span class="option-set-id">${opt.group_id}</span>
+              ${parentBadge}
+            </div>
           </div>
           <div style="display: flex; gap: 4px;">
             <button class="btn-edit-option-set" data-group-id="${opt.group_id}" style="background: none; border: none; color: var(--primary-color); cursor: pointer; padding: 4px;" title="Edit Option Set">
@@ -382,17 +394,196 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function openViewOptionsModal(opt) {
     if (viewOptionsTitle && viewOptionsList && viewModal) {
-      viewOptionsTitle.textContent = opt.group_name;
-      const lis = opt.options.map(c => `
-        <li class="option-choice-item">
-          <span>${c.label}</span>
-          <span class="option-choice-weight">Weight: ${c.weight}</span>
+      viewOptionsTitle.innerHTML = `${opt.group_name} <span class="option-set-id" style="font-size: 13px; font-weight: normal; margin-left: 8px;">${opt.group_id}</span>${opt.parent_group ? ` <span class="parent-group-pill" style="margin-left: 8px;">↳ Depends on: ${opt.parent_group}</span>` : ''}`;
+      const lis = (opt.options || []).map(c => `
+        <li class="option-choice-item" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <span style="font-weight: 500; color: #1e293b;">${c.label}</span>
+            <span class="option-choice-weight">Weight: ${c.weight}</span>
+          </div>
+          ${c.parents && c.parents.length > 0 ? `
+            <div class="choice-parents-tags">
+              ${c.parents.map(p => `<span class="choice-parent-tag">${p}</span>`).join('')}
+            </div>
+          ` : ''}
         </li>
       `).join('');
       viewOptionsList.innerHTML = lis;
       viewModal.style.display = 'flex';
     }
   }
+
+  function populateParentGroupDropdown(excludeGroupId = null) {
+    if (!parentGroupSelect) return;
+    const currentVal = parentGroupSelect.value;
+    parentGroupSelect.innerHTML = '<option value="">None (Independent Option Set)</option>';
+    globalOptions.forEach(opt => {
+      if (opt.group_id !== excludeGroupId && opt.group_name) {
+        const option = document.createElement('option');
+        option.value = opt.group_name;
+        option.textContent = `${opt.group_name} (${opt.group_id})`;
+        parentGroupSelect.appendChild(option);
+      }
+    });
+    if (currentVal) {
+      parentGroupSelect.value = currentVal;
+    }
+  }
+
+  function addBucketCard(parentGroupName, selectedParents = [], choices = []) {
+    if (!bucketsList) return;
+    const parentSet = globalOptions.find(o => o.group_name === parentGroupName);
+    const parentChoices = parentSet && parentSet.options ? parentSet.options.map(o => o.label) : [];
+
+    const bucketIndex = bucketsList.querySelectorAll('.bucket-card').length + 1;
+    const card = document.createElement('div');
+    card.className = 'bucket-card';
+
+    // Header with Bucket Title and Delete button
+    const header = document.createElement('div');
+    header.className = 'bucket-header';
+    header.innerHTML = `
+      <div class="bucket-badge">
+        <span class="bucket-badge-icon">${bucketIndex}</span>
+        <span>Bucket ${bucketIndex}</span>
+      </div>
+      <button type="button" class="btn-danger-outline btn-del-bucket" style="padding: 4px 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;" title="Remove Bucket">
+        &times; Remove Bucket
+      </button>
+    `;
+    card.appendChild(header);
+
+    // Parents section (Pills grid with Select All / Clear All)
+    const pillsSection = document.createElement('div');
+    const pillsLabelRow = document.createElement('div');
+    pillsLabelRow.style.display = 'flex';
+    pillsLabelRow.style.justifyContent = 'space-between';
+    pillsLabelRow.style.alignItems = 'center';
+    pillsLabelRow.style.marginBottom = '6px';
+    pillsLabelRow.innerHTML = `
+      <span class="bucket-pills-label">Applicable ${parentGroupName}s (Click to toggle):</span>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-pill-select-all" style="background: none; border: none; color: #2563eb; font-size: 11.5px; font-weight: 600; cursor: pointer; padding: 0;">Select All</button>
+        <span style="color: #cbd5e1;">|</span>
+        <button type="button" class="btn-pill-clear-all" style="background: none; border: none; color: #64748b; font-size: 11.5px; font-weight: 500; cursor: pointer; padding: 0;">Clear</button>
+      </div>
+    `;
+    pillsSection.appendChild(pillsLabelRow);
+
+    const pillsGrid = document.createElement('div');
+    pillsGrid.className = 'bucket-pills-grid';
+
+    parentChoices.forEach(pLabel => {
+      const isSelected = selectedParents.includes(pLabel);
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'bucket-program-pill' + (isSelected ? ' selected' : '');
+      pill.dataset.parent = pLabel;
+      pill.innerHTML = `<span>${isSelected ? '✓' : '+'}</span><span>${pLabel}</span>`;
+      pill.addEventListener('click', () => {
+        pill.classList.toggle('selected');
+        const isSel = pill.classList.contains('selected');
+        pill.querySelector('span:first-child').textContent = isSel ? '✓' : '+';
+      });
+      pillsGrid.appendChild(pill);
+    });
+    pillsSection.appendChild(pillsGrid);
+    card.appendChild(pillsSection);
+
+    // Select All / Clear All listeners
+    pillsSection.querySelector('.btn-pill-select-all').addEventListener('click', () => {
+      pillsGrid.querySelectorAll('.bucket-program-pill').forEach(pill => {
+        pill.classList.add('selected');
+        pill.querySelector('span:first-child').textContent = '✓';
+      });
+    });
+    pillsSection.querySelector('.btn-pill-clear-all').addEventListener('click', () => {
+      pillsGrid.querySelectorAll('.bucket-program-pill').forEach(pill => {
+        pill.classList.remove('selected');
+        pill.querySelector('span:first-child').textContent = '+';
+      });
+    });
+
+    // Choices section
+    const choicesBox = document.createElement('div');
+    choicesBox.className = 'bucket-choices-box';
+    choicesBox.innerHTML = `
+      <div style="font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 8px;">Choices in this Bucket:</div>
+      <div class="bucket-choices-list"></div>
+      <button type="button" class="btn-secondary btn-add-bucket-choice" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 6px 12px; margin-top: 4px;">
+        + Add Choice to this Bucket
+      </button>
+    `;
+    card.appendChild(choicesBox);
+
+    const bChoicesList = choicesBox.querySelector('.bucket-choices-list');
+    const addBChoiceBtn = choicesBox.querySelector('.btn-add-bucket-choice');
+
+    function addRowToBucket(label = '', weight = '') {
+      const row = document.createElement('div');
+      row.className = 'choice-row';
+      row.style.display = 'flex';
+      row.style.gap = '8px';
+      row.style.marginBottom = '6px';
+      row.innerHTML = `
+        <input type="text" class="form-control opt-label-input" placeholder="Choice Label (e.g. Computer Science)" value="${label ? String(label).replace(/"/g, '&quot;') : ''}" style="flex: 1;">
+        <input type="number" min="1" class="form-control opt-weight-input" placeholder="Weight" value="${weight !== '' ? weight : '1'}" style="width: 80px;">
+        <button type="button" class="btn-danger-outline btn-del-choice-row" style="padding: 6px 10px; font-size: 14px;" title="Remove">&times;</button>
+      `;
+      row.querySelector('.btn-del-choice-row').addEventListener('click', () => row.remove());
+      bChoicesList.appendChild(row);
+    }
+
+    if (choices && choices.length > 0) {
+      choices.forEach(c => addRowToBucket(c.label, c.weight));
+    } else {
+      addRowToBucket();
+    }
+
+    addBChoiceBtn.addEventListener('click', () => addRowToBucket());
+
+    // Remove Bucket listener
+    header.querySelector('.btn-del-bucket').addEventListener('click', () => {
+      card.remove();
+      bucketsList.querySelectorAll('.bucket-card').forEach((bCard, idx) => {
+        const num = idx + 1;
+        const bBadge = bCard.querySelector('.bucket-badge');
+        if (bBadge) {
+          bBadge.innerHTML = `<span class="bucket-badge-icon">${num}</span><span>Bucket ${num}</span>`;
+        }
+      });
+    });
+
+    bucketsList.appendChild(card);
+  }
+
+  // Parent Group select change listener
+  parentGroupSelect?.addEventListener('change', function() {
+    const parentName = this.value;
+    if (!parentName) {
+      if (flatChoicesContainer) flatChoicesContainer.style.display = 'block';
+      if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'none';
+    } else {
+      if (flatChoicesContainer) flatChoicesContainer.style.display = 'none';
+      if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'block';
+      if (bucketsList && !bucketsList.querySelector('.bucket-card')) {
+        const flatRows = Array.from(choicesList.querySelectorAll('.choice-row'));
+        const migrated = [];
+        flatRows.forEach(r => {
+          const l = r.querySelector('.opt-label-input')?.value.trim();
+          const w = r.querySelector('.opt-weight-input')?.value.trim();
+          if (l) migrated.push({ label: l, weight: w || '1' });
+        });
+        addBucketCard(parentName, [], migrated);
+      }
+    }
+  });
+
+  addBucketBtn?.addEventListener('click', () => {
+    const parentName = parentGroupSelect ? parentGroupSelect.value : '';
+    if (!parentName) return;
+    addBucketCard(parentName, [], []);
+  });
 
   closeViewBtn?.addEventListener('click', () => {
     viewModal.style.display = 'none';
@@ -408,6 +599,13 @@ document.addEventListener("DOMContentLoaded", function() {
     nameInput.readOnly = false;
     nameInput.style.backgroundColor = '';
     nameInput.title = '';
+
+    populateParentGroupDropdown();
+    if (parentGroupSelect) parentGroupSelect.value = '';
+    if (flatChoicesContainer) flatChoicesContainer.style.display = 'block';
+    if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'none';
+    if (bucketsList) bucketsList.innerHTML = '';
+
     choicesList.innerHTML = '';
     // Add two default rows
     addChoiceRow();
@@ -426,13 +624,44 @@ document.addEventListener("DOMContentLoaded", function() {
     nameInput.readOnly = true;
     nameInput.style.backgroundColor = '#f1f5f9';
     nameInput.title = 'Option Set Name cannot be changed to preserve analytics of existing forms.';
-    choicesList.innerHTML = '';
-    
-    if (opt.options && opt.options.length > 0) {
-      // Pass isExisting = true for options already saved
-      opt.options.forEach(choice => addChoiceRow(choice.label, choice.weight, true));
+
+    populateParentGroupDropdown(opt.group_id);
+    const parentGroup = opt.parent_group || '';
+    if (parentGroupSelect) parentGroupSelect.value = parentGroup;
+
+    if (parentGroup) {
+      if (flatChoicesContainer) flatChoicesContainer.style.display = 'none';
+      if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'block';
+      if (bucketsList) bucketsList.innerHTML = '';
+
+      const optsWithParents = (opt.options || []).filter(c => c.parents && c.parents.length > 0);
+      if (optsWithParents.length > 0) {
+        // Group choices by unique parents signature
+        const bucketGroups = {};
+        opt.options.forEach(c => {
+          const key = c.parents && c.parents.length > 0 ? [...c.parents].sort().join('|||') : '__ALL__';
+          if (!bucketGroups[key]) {
+            bucketGroups[key] = { parents: c.parents || [], choices: [] };
+          }
+          bucketGroups[key].choices.push({ label: c.label, weight: c.weight });
+        });
+        Object.values(bucketGroups).forEach(bg => {
+          addBucketCard(parentGroup, bg.parents, bg.choices);
+        });
+      } else {
+        // Options exist, but no parents mapped yet (e.g. existing Department set)
+        const allChoices = (opt.options || []).map(c => ({ label: c.label, weight: c.weight }));
+        addBucketCard(parentGroup, [], allChoices);
+      }
     } else {
-      addChoiceRow();
+      if (flatChoicesContainer) flatChoicesContainer.style.display = 'block';
+      if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'none';
+      choicesList.innerHTML = '';
+      if (opt.options && opt.options.length > 0) {
+        opt.options.forEach(choice => addChoiceRow(choice.label, choice.weight, true));
+      } else {
+        addChoiceRow();
+      }
     }
     
     updateOtherButtonState();
@@ -573,43 +802,105 @@ document.addEventListener("DOMContentLoaded", function() {
        }
     }
     
-    const choiceRows = choicesList.querySelectorAll('.choice-row');
-    const choices = [];
-    
-    choiceRows.forEach(row => {
-      const labelInput = row.querySelector('.opt-label-input');
-      const weightInput = row.querySelector('.opt-weight-input');
-      const label = labelInput.value.trim();
-      let weightStr = weightInput.value.trim();
-      
-      if (label) {
-        let weightVal = weightStr ? parseInt(weightStr, 10) : 1;
-        if (weightVal < 1) {
-            weightVal = 1;
-        }
-        
-        choices.push({
-          label: label,
-          weight: weightVal
-        });
-      }
-    });
+    const parentGroupVal = parentGroupSelect ? parentGroupSelect.value.trim() : '';
+    let choices = [];
 
-    // Check for duplicate choices within this option set
-    const labelCounts = {};
-    let hasDuplicate = false;
-    for (let c of choices) {
-        const lowerLabel = c.label.toLowerCase();
-        if (labelCounts[lowerLabel]) {
-            hasDuplicate = true;
-            break;
-        }
-        labelCounts[lowerLabel] = true;
-    }
-
-    if (hasDuplicate) {
-        Swal.fire('Duplicate Choices', 'You have entered identical choices in this Option Set. Please ensure all choices are unique before saving.', 'warning');
+    if (parentGroupVal) {
+      // Collect choices from Buckets
+      const bucketCards = Array.from(bucketsList.querySelectorAll('.bucket-card'));
+      if (bucketCards.length === 0) {
+        Swal.fire('No Buckets', 'Please add at least one bucket to define choices and their applicable programs.', 'warning');
         return;
+      }
+
+      const mergedChoicesMap = new Map();
+      let validationError = null;
+
+      bucketCards.forEach((bCard, bIdx) => {
+        if (validationError) return;
+        const selectedPills = Array.from(bCard.querySelectorAll('.bucket-program-pill.selected'));
+        const selectedParentLabels = selectedPills.map(p => p.dataset.parent);
+        if (selectedParentLabels.length === 0) {
+          validationError = `Please select at least one applicable ${parentGroupVal} for Bucket ${bIdx + 1}.`;
+          return;
+        }
+
+        const choiceRows = bCard.querySelectorAll('.choice-row');
+        choiceRows.forEach(row => {
+          const lInput = row.querySelector('.opt-label-input');
+          const wInput = row.querySelector('.opt-weight-input');
+          const lbl = lInput ? lInput.value.trim() : '';
+          const wVal = wInput && wInput.value ? parseInt(wInput.value, 10) : 1;
+          if (lbl) {
+            const key = lbl.toLowerCase();
+            if (!mergedChoicesMap.has(key)) {
+              mergedChoicesMap.set(key, {
+                label: lbl,
+                weight: wVal >= 1 ? wVal : 1,
+                parents: new Set(selectedParentLabels)
+              });
+            } else {
+              const existing = mergedChoicesMap.get(key);
+              selectedParentLabels.forEach(p => existing.parents.add(p));
+            }
+          }
+        });
+      });
+
+      if (validationError) {
+        Swal.fire('Missing Parent Selection', validationError, 'warning');
+        return;
+      }
+
+      if (mergedChoicesMap.size === 0) {
+        Swal.fire('Empty Choices', 'Please enter at least one choice inside the buckets.', 'warning');
+        return;
+      }
+
+      choices = Array.from(mergedChoicesMap.values()).map(c => ({
+        label: c.label,
+        weight: c.weight,
+        parents: Array.from(c.parents)
+      }));
+    } else {
+      // Collect from Flat View
+      const choiceRows = choicesList.querySelectorAll('.choice-row');
+      
+      choiceRows.forEach(row => {
+        const labelInput = row.querySelector('.opt-label-input');
+        const weightInput = row.querySelector('.opt-weight-input');
+        const label = labelInput.value.trim();
+        let weightStr = weightInput.value.trim();
+        
+        if (label) {
+          let weightVal = weightStr ? parseInt(weightStr, 10) : 1;
+          if (weightVal < 1) {
+              weightVal = 1;
+          }
+          
+          choices.push({
+            label: label,
+            weight: weightVal
+          });
+        }
+      });
+
+      // Check for duplicate choices within this option set
+      const labelCounts = {};
+      let hasDuplicate = false;
+      for (let c of choices) {
+          const lowerLabel = c.label.toLowerCase();
+          if (labelCounts[lowerLabel]) {
+              hasDuplicate = true;
+              break;
+          }
+          labelCounts[lowerLabel] = true;
+      }
+
+      if (hasDuplicate) {
+          Swal.fire('Duplicate Choices', 'You have entered identical choices in this Option Set. Please ensure all choices are unique before saving.', 'warning');
+          return;
+      }
     }
 
     // Ensure 'Other:' is always at the end
@@ -621,7 +912,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const payload = {
       group_name: nameInput,
-      options: choices
+      options: choices,
+      parent_group: parentGroupVal
     };
     
     if (currentEditGroupId) {

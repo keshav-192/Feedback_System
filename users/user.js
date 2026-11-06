@@ -208,6 +208,148 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ── Hierarchical (Cascading) Dropdowns Setup ────────────────────────────────
+  function initHierarchicalDropdowns() {
+    const childSelects = document.querySelectorAll('select[data-parent-group]');
+    if (childSelects.length === 0) return;
+
+    childSelects.forEach(childSelect => {
+      const parentGroupName = childSelect.getAttribute('data-parent-group');
+      if (!parentGroupName) return;
+
+      // Cache all initial options (skipping the first placeholder)
+      const cachedOptions = [];
+      Array.from(childSelect.options).forEach((opt, idx) => {
+        if (idx === 0 && opt.value === '') return;
+        let parents = [];
+        const rawParents = opt.getAttribute('data-parents');
+        if (rawParents) {
+          try {
+            parents = JSON.parse(rawParents);
+          } catch (e) {
+            parents = [];
+          }
+        }
+        cachedOptions.push({
+          value: opt.value,
+          text: opt.textContent,
+          parents: Array.isArray(parents) ? parents : []
+        });
+      });
+      childSelect._cachedOptions = cachedOptions;
+
+      // Find parent element(s): select or radio buttons
+      const parentSelects = document.querySelectorAll(`select[data-group-id="${parentGroupName}"]`);
+      const parentRadios = document.querySelectorAll(`input[type="radio"][data-group-id="${parentGroupName}"]`);
+
+      function getParentValue() {
+        for (let sel of parentSelects) {
+          if (sel.value) return sel.value;
+        }
+        for (let rad of parentRadios) {
+          if (rad.checked) return rad.value;
+        }
+        return '';
+      }
+
+      function syncChild() {
+        const parentVal = getParentValue();
+        const currentChildVal = childSelect.value;
+        childSelect.innerHTML = '';
+
+        if (!parentVal) {
+          // Parent not selected: keep disabled and show notice
+          childSelect.disabled = true;
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          placeholder.hidden = true;
+          placeholder.textContent = `Please select ${parentGroupName} first`;
+          childSelect.appendChild(placeholder);
+
+          if (currentChildVal !== '') {
+            childSelect.value = '';
+            childSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          return;
+        }
+
+        // Parent selected: enable child and filter matching choices
+        childSelect.disabled = false;
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        placeholder.hidden = true;
+        placeholder.textContent = 'Choose option';
+        childSelect.appendChild(placeholder);
+
+        const matching = childSelect._cachedOptions.filter(opt => {
+          if (!opt.parents || opt.parents.length === 0) {
+            return true; // universal choice
+          }
+          return opt.parents.includes(parentVal);
+        });
+
+        matching.forEach(opt => {
+          const optEl = document.createElement('option');
+          optEl.value = opt.value;
+          optEl.textContent = opt.text;
+          if (opt.parents && opt.parents.length > 0) {
+            optEl.setAttribute('data-parents', JSON.stringify(opt.parents));
+          }
+          childSelect.appendChild(optEl);
+        });
+
+        // Retain previous value if still applicable, otherwise reset
+        if (currentChildVal && matching.some(m => m.value === currentChildVal)) {
+          childSelect.value = currentChildVal;
+        } else {
+          childSelect.value = '';
+          if (currentChildVal !== '') {
+            childSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      }
+
+      parentSelects.forEach(sel => sel.addEventListener('change', syncChild));
+      parentRadios.forEach(rad => rad.addEventListener('change', syncChild));
+
+      // Initial synchronization
+      syncChild();
+    });
+  }
+
+  function resetHierarchicalDropdowns() {
+    const childSelects = document.querySelectorAll('select[data-parent-group]');
+    childSelects.forEach(childSelect => {
+      const parentGroupName = childSelect.getAttribute('data-parent-group');
+      childSelect.disabled = true;
+      childSelect.innerHTML = '';
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      placeholder.hidden = true;
+      placeholder.textContent = `Please select ${parentGroupName} first`;
+      childSelect.appendChild(placeholder);
+      childSelect.value = '';
+    });
+  }
+
+  initHierarchicalDropdowns();
+
+  // Clear card error on any select change
+  document.querySelectorAll('select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      if (sel.value !== '') {
+        const card = sel.closest('.card');
+        if (card) card.classList.remove('card-error');
+      }
+    });
+  });
+
   // Navigate to a specific step
   function goToStep(step) {
     // Hide all steps
@@ -774,6 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
           form.reset();
           hideAllOtherContainers();
           resetAllSliders();
+          resetHierarchicalDropdowns();
           const errorCards = document.querySelectorAll('.card.card-error');
           errorCards.forEach(card => card.classList.remove('card-error'));
           logClientEvent('Cleared Form');
@@ -809,6 +952,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.reset();
     hideAllOtherContainers();
     resetAllSliders();
+    resetHierarchicalDropdowns();
     logClientEvent('Reset Form');
     goToStep(1);
   });

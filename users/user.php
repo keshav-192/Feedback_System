@@ -23,11 +23,15 @@ if (!file_exists($options_json_path)) {
     }
 }
 
-// Index options by group_name
+// Index options by group_name and map parent_group relationships
 $option_groups = [];
+$option_group_parents = [];
 foreach ($options_data as $group) {
     if (isset($group['group_name'])) {
         $option_groups[$group['group_name']] = isset($group['options']) ? $group['options'] : [];
+        if (!empty($group['parent_group'])) {
+            $option_group_parents[$group['group_name']] = trim($group['parent_group']);
+        }
     }
 }
 
@@ -555,14 +559,26 @@ if ($total_steps === 0) {
                 }
                 $selectClass = $hasOther ? 'select-input select-with-other' : 'select-input';
                 $otherTarget = $hasOther ? "{$q_name}_other_container" : '';
+
+                $is_dependent = false;
+                $parent_group_name = '';
+                if ($group_id && isset($option_group_parents[$group_id])) {
+                    $is_dependent = true;
+                    $parent_group_name = $option_group_parents[$group_id];
+                }
               ?>
                 <div class="<?= $card_class ?>" id="q-<?= $q['id'] ?>">
                   <div class="question-title"><?= htmlspecialchars($q['question']) ?> <?= $is_req ? '<span class="required-asterisk">*</span>' : '' ?></div>
                   <div class="select-wrapper">
-                    <select class="<?= $selectClass ?>" name="<?= $q_name ?>" <?= $is_req ? 'required' : '' ?> <?= $hasOther ? "data-other-target=\"{$otherTarget}\"" : '' ?>>
-                      <option value="" disabled selected hidden>Choose option</option>
-                      <?php foreach ($options as $opt): ?>
-                        <option value="<?= htmlspecialchars($opt['label']) ?>"><?= htmlspecialchars($opt['label']) ?></option>
+                    <select class="<?= $selectClass ?>" name="<?= $q_name ?>" <?= $is_req ? 'required' : '' ?> <?= $hasOther ? "data-other-target=\"{$otherTarget}\"" : '' ?>
+                      data-group-id="<?= htmlspecialchars($group_id) ?>"
+                      <?= $is_dependent ? 'data-parent-group="' . htmlspecialchars($parent_group_name) . '" disabled' : '' ?>
+                    >
+                      <option value="" disabled selected hidden><?= $is_dependent ? "Please select {$parent_group_name} first" : "Choose option" ?></option>
+                      <?php foreach ($options as $opt): 
+                        $parentsAttr = (!empty($opt['parents']) && is_array($opt['parents'])) ? ' data-parents="' . htmlspecialchars(json_encode($opt['parents']), ENT_QUOTES, 'UTF-8') . '"' : '';
+                      ?>
+                        <option value="<?= htmlspecialchars($opt['label']) ?>"<?= $parentsAttr ?>><?= htmlspecialchars($opt['label']) ?></option>
                       <?php endforeach; ?>
                     </select>
                     <span class="select-arrow"></span>
@@ -620,7 +636,7 @@ if ($total_steps === 0) {
                         $otherCbTarget = "{$q_name}_other_cb_container";
                       ?>
                         <label class="radio-option other-input-container">
-                          <input type="radio" name="<?= $q_name ?>" value="<?= htmlspecialchars($opt['label']) ?>" class="radio-other-trigger" data-other-target="<?= $otherCbTarget ?>">
+                          <input type="radio" name="<?= $q_name ?>" data-group-id="<?= htmlspecialchars($group_id) ?>" value="<?= htmlspecialchars($opt['label']) ?>" class="radio-other-trigger" data-other-target="<?= $otherCbTarget ?>">
                           <span class="radio-checkmark"></span>
                           <span><?= htmlspecialchars($opt['label']) ?><?= strpos($opt['label'], ':') === false ? ':' : '' ?></span>
                         </label>
@@ -629,7 +645,7 @@ if ($total_steps === 0) {
                         </div>
                       <?php else: ?>
                         <label class="radio-option">
-                          <input type="radio" name="<?= $q_name ?>" value="<?= htmlspecialchars($opt['label']) ?>">
+                          <input type="radio" name="<?= $q_name ?>" data-group-id="<?= htmlspecialchars($group_id) ?>" value="<?= htmlspecialchars($opt['label']) ?>">
                           <span class="radio-checkmark"></span>
                           <?= htmlspecialchars($opt['label']) ?>
                         </label>

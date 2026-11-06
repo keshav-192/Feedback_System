@@ -50,19 +50,28 @@ if (basename($_SERVER['PHP_SELF']) === basename(__FILE__)) {
 
 <!-- Modal for Adding New Option Set -->
 <div id="add-option-modal" class="modal-overlay" style="display: none;">
-  <div class="modal-content" style="max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+  <div class="modal-content" style="max-width: 720px; width: 92%; max-height: 90vh; overflow-y: auto;">
     <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
       <h3 style="margin: 0; color: var(--text-main);">Add New Option Set</h3>
       <button class="modal-close" id="close-option-modal-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary);">&times;</button>
     </div>
     <div class="modal-body">
       
-      <div class="form-group" style="margin-bottom: 24px;">
+      <div class="form-group" style="margin-bottom: 20px;">
         <label style="display: block; font-weight: 500; margin-bottom: 8px; color: var(--text-main);">Option Set Name *</label>
         <input type="text" id="new-opt-name" class="form-control" placeholder="e.g. 5-Point Quality Scale">
       </div>
 
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label style="display: block; font-weight: 500; margin-bottom: 6px; color: var(--text-main);">Parent Option Set (Optional)</label>
+        <select id="opt-parent-group" class="form-control" style="width: 100%;">
+          <option value="">None (Independent Option Set)</option>
+        </select>
+        <small class="text-secondary" style="font-size: 12px; margin-top: 4px; display: block;">Select a parent option set (e.g. Program) to organize choices into buckets.</small>
+      </div>
+
+      <!-- Flat Choices View (When Parent is None) -->
+      <div id="flat-choices-container" class="form-group">
         <label style="display: block; font-weight: 500; margin-bottom: 8px; color: var(--text-main);">Choices (Highest weight first)</label>
         <div id="new-opt-choices-list" style="display: flex; flex-direction: column; gap: 12px;">
           <!-- Choice rows will be injected here -->
@@ -76,6 +85,21 @@ if (basename($_SERVER['PHP_SELF']) === basename(__FILE__)) {
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Add 'Other' Option
           </button>
+        </div>
+      </div>
+
+      <!-- Bucket Choices View (When Parent is Selected) -->
+      <div id="bucket-choices-container" class="form-group" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <label style="font-weight: 600; color: var(--text-main); margin: 0; font-size: 15px;">Program Buckets & Applicable Choices</label>
+          <button type="button" id="add-bucket-btn" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px;">
+            <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add Bucket
+          </button>
+        </div>
+        <p class="text-secondary" style="font-size: 13px; margin-top: 0; margin-bottom: 14px;">Group your choices by selecting which parent programs they apply to. You can select multiple programs per bucket.</p>
+        <div id="buckets-list" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Bucket cards dynamically injected here -->
         </div>
       </div>
       
