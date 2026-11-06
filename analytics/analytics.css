@@ -189,9 +189,8 @@ body {
 .chart-title {
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   color: var(--text-main);
-  min-height: 48px;
   line-height: 1.4;
   word-break: break-word;
   text-align: center;
@@ -360,25 +359,22 @@ body {
 }
 
 .chart-header-block {
-  margin-bottom: 14px;
-}
-
-.chart-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text-main);
-  min-height: 36px; /* Align titles visually */
-  line-height: 1.4;
-  flex: 1 1 200px;
+  width: 100%;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .chart-meta {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 8px;
+  width: 100%;
+  margin-top: 4px;
   margin-bottom: 14px;
 }
 
@@ -645,28 +641,31 @@ body {
 }
 
 /* ── Card Header Actions & Table View ──────────────────────────── */
-.card-header-top {
+.card-header-top,
+.chart-header-top-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .card-action-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  justify-content: center;
+  gap: 8px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .card-action-btn {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  padding: 5px 10px;
+  padding: 5px 12px;
   cursor: pointer;
   color: var(--text-secondary);
   display: inline-flex;
@@ -675,13 +674,6 @@ body {
   font-size: 12px;
   font-weight: 500;
   gap: 5px;
-  line-height: 1.4;
-  transition: all 0.2s;
-  user-select: none;
-}
-  font-size: 12px;
-  font-weight: 500;
-  gap: 4px;
   line-height: 1.4;
   transition: all 0.2s;
   user-select: none;
@@ -1744,10 +1736,11 @@ body {
 
 .chart-header-top-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
   margin-bottom: 10px;
 }
 
