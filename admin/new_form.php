@@ -68,8 +68,9 @@ if (basename($_SERVER['PHP_SELF']) === basename(__FILE__)) {
       <!-- Dynamic sections will be injected here -->
     </div>
 
-    <div class="form-builder-actions" style="margin-top: 24px; text-align: right; display: none;" id="form-save-actions">
-      <button id="save-form-btn" class="btn-primary" style="padding: 12px 32px; font-size: 16px;">Save Form</button>
+    <div class="form-builder-actions" style="margin-top: 24px; text-align: right; display: none; justify-content: flex-end; gap: 12px;" id="form-save-actions">
+      <button type="button" id="cancel-new-form-btn" class="btn-secondary" style="padding: 12px 32px; font-size: 16px;">Cancel</button>
+      <button type="button" id="save-form-btn" class="btn-primary" style="padding: 12px 32px; font-size: 16px;">Save Form</button>
     </div>
   </div>
 

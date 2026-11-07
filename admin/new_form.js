@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     addSection();
     if (formBuilderContainer.children.length > 0) {
-      formSaveActions.style.display = 'block';
+      formSaveActions.style.display = 'flex';
     }
   });
 
@@ -802,6 +802,8 @@ document.addEventListener("DOMContentLoaded", function() {
   function updateSaveButtonVisibility() {
      if(formBuilderContainer.children.length === 0) {
        formSaveActions.style.display = 'none';
+     } else {
+       formSaveActions.style.display = 'flex';
      }
   }
   
@@ -920,6 +922,66 @@ document.addEventListener("DOMContentLoaded", function() {
 
     return payload;
   }
+
+  function resetNewFormBuilder() {
+    builderOperations = [];
+    sectionCount = 0;
+
+    // Reset Title, Description & QR Input fields
+    if (titleInput) {
+      titleInput.value = '';
+      titleInput.style.borderColor = '';
+      const err = titleInput.parentNode ? titleInput.parentNode.querySelector('.inline-error-text') : null;
+      if (err) err.remove();
+    }
+    if (descInput) {
+      descInput.value = '';
+    }
+    if (qrInput) {
+      qrInput.value = '';
+    }
+    if (qrPreviewContainer) {
+      qrPreviewContainer.style.display = 'none';
+    }
+    if (qrPreviewImg) {
+      qrPreviewImg.src = '';
+    }
+
+    // Reset Title/Description Preview Card in builder view
+    if (displayTitle) displayTitle.textContent = 'Form Title';
+    if (displayDesc) {
+      displayDesc.textContent = 'Form Description';
+      displayDesc.style.display = 'block';
+    }
+
+    // Clear all dynamic sections & questions
+    if (formBuilderContainer) {
+      formBuilderContainer.innerHTML = '';
+    }
+
+    // Remove any save action errors and hide action bar
+    if (formSaveActions) {
+      const existingErrors = formSaveActions.parentNode ? formSaveActions.parentNode.querySelectorAll('.inline-error-text') : [];
+      existingErrors.forEach(e => e.remove());
+      formSaveActions.style.display = 'none';
+    }
+
+    if (startBtn) {
+      startBtn.disabled = false;
+    }
+
+    // Switch view back to Step 1 (Setup view)
+    if (builderView) builderView.style.display = 'none';
+    if (setupView) setupView.style.display = 'block';
+  }
+
+  const cancelNewFormBtn = document.getElementById('cancel-new-form-btn');
+  if (cancelNewFormBtn) {
+    cancelNewFormBtn.addEventListener('click', () => {
+      recordAdminOperation("Cancelled New Form (All data cleared)");
+      resetNewFormBuilder();
+    });
+  }
   
   const saveFormBtn = document.getElementById('save-form-btn');
   if(saveFormBtn) {
@@ -948,19 +1010,7 @@ document.addEventListener("DOMContentLoaded", function() {
         saveFormBtn.textContent = 'Save Form';
         
         if(data.success) {
-          builderOperations = [];
-          // Instantly reset the form back to initial setup view
-          document.getElementById('form-title-input').value = '';
-          document.getElementById('form-desc-input').value = '';
-          if (document.getElementById('form-qr-input')) {
-            document.getElementById('form-qr-input').value = '';
-            document.getElementById('qr-preview-container').style.display = 'none';
-            document.getElementById('qr-preview-img').src = '';
-          }
-          document.getElementById('form-builder-container').innerHTML = '';
-          document.getElementById('form-save-actions').style.display = 'none';
-          document.getElementById('form-builder-view').style.display = 'none';
-          document.getElementById('form-setup-view').style.display = 'block';
+          resetNewFormBuilder();
 
           Swal.fire({
             icon: 'success',
