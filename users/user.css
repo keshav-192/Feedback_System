@@ -244,6 +244,25 @@ body {
   background-color: #991b1b; /* Deep bold red on hover */
 }
 
+.options-container::-webkit-scrollbar-button {
+  display: block;
+  height: 8px;
+  width: 8px;
+  background-color: #fee2e2;
+}
+
+.options-container::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><polygon points='4,1 7,6 1,6' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.options-container::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><polygon points='4,7 7,2 1,2' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 /* Custom Checkbox Option styles */
 .checkbox-option {
   display: flex;
