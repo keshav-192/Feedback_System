@@ -405,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (shouldShow) {
           if (sub.style.display === 'none') {
-            sub.style.display = 'block';
+            sub.style.display = 'contents';
           }
         } else {
           if (sub.style.display !== 'none') {

@@ -723,12 +723,18 @@ select::-webkit-scrollbar-thumb:hover {
   .grid-full-width,
   .title-card,
   .section-header-card,
+  .sub-section-title-card,
   .nav-buttons-container,
   #review-answers-container {
     grid-column: span 2;
   }
 
   /* Checkbox cards flow naturally now */
+}
+
+/* Allow conditional sub-sections to flow seamlessly into the form's 2-column grid */
+.conditional-sub-section {
+  display: contents;
 }
 
 /* Review/Response Grid layout */

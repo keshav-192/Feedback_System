@@ -309,9 +309,9 @@ if ($total_steps === 0) {
                         echo '</div>'; // Close previous conditional-sub-section
                     }
                     if ($block_cond_key !== null) {
-                        echo '<div class="conditional-sub-section" data-depends-on="q-' . $block_dep_id . '" data-depends-value="' . htmlspecialchars($block_dep_val, ENT_QUOTES) . '" style="display: none; margin-bottom: 16px;">';
+                        echo '<div class="conditional-sub-section" data-depends-on="q-' . $block_dep_id . '" data-depends-value="' . htmlspecialchars($block_dep_val, ENT_QUOTES) . '" style="display: none;">';
                         if (!empty($block_sub_name)) {
-                            echo '<div class="card sub-section-title-card" style="border-left: 4px solid #8b5cf6; background: #faf5ff; padding: 14px 20px; margin-bottom: 16px;">';
+                            echo '<div class="card sub-section-title-card grid-full-width" style="border-left: 4px solid #8b5cf6; background: #faf5ff; padding: 14px 20px; margin-bottom: 16px;">';
                             echo '<h3 style="margin: 0; font-size: 16.5px; font-weight: 600; color: #5b21b6;">' . htmlspecialchars($block_sub_name) . '</h3>';
                             echo '</div>';
                         }
