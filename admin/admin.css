@@ -963,3 +963,103 @@ body {
 .toggle-password-btn:hover {
   color: var(--primary-color, #b32b2b) !important;
 }
+
+/* ==========================================================================
+   Custom Red/Maroon Scrollbars for Dropdowns & Select Menus
+   ========================================================================== */
+.autocomplete-dropdown,
+.parent-search-dropdown,
+.admin-dropdown-menu,
+.custom-dropdown-list,
+.dropdown-menu,
+select,
+.select-input,
+.chart-data-table-container,
+.filter-sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #fee2e2;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar,
+.parent-search-dropdown::-webkit-scrollbar,
+.admin-dropdown-menu::-webkit-scrollbar,
+.custom-dropdown-list::-webkit-scrollbar,
+.dropdown-menu::-webkit-scrollbar,
+select::-webkit-scrollbar,
+.select-input::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  display: block;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-track,
+.parent-search-dropdown::-webkit-scrollbar-track,
+.admin-dropdown-menu::-webkit-scrollbar-track,
+.custom-dropdown-list::-webkit-scrollbar-track,
+.dropdown-menu::-webkit-scrollbar-track,
+select::-webkit-scrollbar-track,
+.select-input::-webkit-scrollbar-track {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-thumb,
+.parent-search-dropdown::-webkit-scrollbar-thumb,
+.admin-dropdown-menu::-webkit-scrollbar-thumb,
+.custom-dropdown-list::-webkit-scrollbar-thumb,
+.dropdown-menu::-webkit-scrollbar-thumb,
+select::-webkit-scrollbar-thumb,
+.select-input::-webkit-scrollbar-thumb {
+  background-color: #dc2626;
+  border-radius: 6px;
+  border: 1px solid #fee2e2;
+  transition: background-color 0.2s ease;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-thumb:hover,
+.parent-search-dropdown::-webkit-scrollbar-thumb:hover,
+.admin-dropdown-menu::-webkit-scrollbar-thumb:hover,
+.custom-dropdown-list::-webkit-scrollbar-thumb:hover,
+.dropdown-menu::-webkit-scrollbar-thumb:hover,
+select::-webkit-scrollbar-thumb:hover,
+.select-input::-webkit-scrollbar-thumb:hover {
+  background-color: #991b1b;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-button,
+.parent-search-dropdown::-webkit-scrollbar-button,
+.admin-dropdown-menu::-webkit-scrollbar-button,
+.custom-dropdown-list::-webkit-scrollbar-button,
+.dropdown-menu::-webkit-scrollbar-button,
+select::-webkit-scrollbar-button,
+.select-input::-webkit-scrollbar-button {
+  display: block;
+  height: 6px;
+  width: 6px;
+  background-color: #fee2e2;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-button:single-button:vertical:decrement,
+.parent-search-dropdown::-webkit-scrollbar-button:single-button:vertical:decrement,
+.admin-dropdown-menu::-webkit-scrollbar-button:single-button:vertical:decrement,
+.custom-dropdown-list::-webkit-scrollbar-button:single-button:vertical:decrement,
+.dropdown-menu::-webkit-scrollbar-button:single-button:vertical:decrement,
+select::-webkit-scrollbar-button:single-button:vertical:decrement,
+.select-input::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 8 8'><polygon points='4,1 7,6 1,6' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-button:single-button:vertical:increment,
+.parent-search-dropdown::-webkit-scrollbar-button:single-button:vertical:increment,
+.admin-dropdown-menu::-webkit-scrollbar-button:single-button:vertical:increment,
+.custom-dropdown-list::-webkit-scrollbar-button:single-button:vertical:increment,
+.dropdown-menu::-webkit-scrollbar-button:single-button:vertical:increment,
+select::-webkit-scrollbar-button:single-button:vertical:increment,
+.select-input::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 8 8'><polygon points='4,7 7,2 1,2' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}

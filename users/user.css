@@ -466,6 +466,34 @@ body {
     border-color 0.15s ease,
     box-shadow 0.15s ease;
   cursor: pointer;
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #fee2e2;
+}
+
+.select-input::-webkit-scrollbar,
+select::-webkit-scrollbar {
+  width: 7px;
+  display: block;
+}
+
+.select-input::-webkit-scrollbar-track,
+select::-webkit-scrollbar-track {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+}
+
+.select-input::-webkit-scrollbar-thumb,
+select::-webkit-scrollbar-thumb {
+  background-color: #dc2626;
+  border-radius: 6px;
+  border: 1px solid #fee2e2;
+  transition: background-color 0.2s ease;
+}
+
+.select-input::-webkit-scrollbar-thumb:hover,
+select::-webkit-scrollbar-thumb:hover {
+  background-color: #991b1b;
 }
 
 .select-input:focus {
