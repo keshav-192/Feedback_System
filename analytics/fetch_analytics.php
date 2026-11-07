@@ -689,6 +689,10 @@ foreach ($valid_responses as $vr_idx => $vr) {
             $group_id = $best_ref['group_id'];
             $idx = $best_ref['idx'];
             
+            if ($answer === 'Not answered' || $answer === 'Not applicable' || $answer === '' || $answer === null) {
+                continue;
+            }
+
             $analytics_data[$group_id]['questions'][$idx]['total_answered']++;
             
             $type = $analytics_data[$group_id]['questions'][$idx]['type'];

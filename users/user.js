@@ -255,11 +255,15 @@ document.addEventListener('DOMContentLoaded', function () {
       function syncChild() {
         const parentVal = getParentValue();
         const currentChildVal = childSelect.value;
+        const card = childSelect.closest('.card');
         childSelect.innerHTML = '';
 
         if (!parentVal) {
           // Parent not selected: keep disabled and show notice
           childSelect.disabled = true;
+          if (card) {
+            card.classList.remove('card-error', 'card-not-applicable');
+          }
           const placeholder = document.createElement('option');
           placeholder.value = '';
           placeholder.disabled = true;
@@ -275,8 +279,40 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        // Parent selected: enable child and filter matching choices
+        // Parent selected: filter matching choices
+        const matching = childSelect._cachedOptions.filter(opt => {
+          if (!opt.parents || opt.parents.length === 0) {
+            return true; // universal choice
+          }
+          return opt.parents.includes(parentVal);
+        });
+
+        if (matching.length === 0) {
+          // NO CHOICES MATCH: This question is not applicable for the selected parent option!
+          childSelect.disabled = true;
+          if (card) {
+            card.classList.remove('card-error');
+            card.classList.add('card-not-applicable');
+          }
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          placeholder.textContent = `Not applicable for "${parentVal}"`;
+          childSelect.appendChild(placeholder);
+
+          if (currentChildVal !== '') {
+            childSelect.value = '';
+            childSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          return;
+        }
+
+        // Choices exist: enable child and populate matching options
         childSelect.disabled = false;
+        if (card) {
+          card.classList.remove('card-not-applicable');
+        }
         const placeholder = document.createElement('option');
         placeholder.value = '';
         placeholder.disabled = true;
@@ -284,13 +320,6 @@ document.addEventListener('DOMContentLoaded', function () {
         placeholder.hidden = true;
         placeholder.textContent = 'Choose option';
         childSelect.appendChild(placeholder);
-
-        const matching = childSelect._cachedOptions.filter(opt => {
-          if (!opt.parents || opt.parents.length === 0) {
-            return true; // universal choice
-          }
-          return opt.parents.includes(parentVal);
-        });
 
         matching.forEach(opt => {
           const optEl = document.createElement('option');
@@ -325,6 +354,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const childSelects = document.querySelectorAll('select[data-parent-group]');
     childSelects.forEach(childSelect => {
       const parentGroupName = childSelect.getAttribute('data-parent-group');
+      const card = childSelect.closest('.card');
+      if (card) card.classList.remove('card-not-applicable', 'card-error');
       childSelect.disabled = true;
       childSelect.innerHTML = '';
       const placeholder = document.createElement('option');
@@ -451,15 +482,19 @@ document.addEventListener('DOMContentLoaded', function () {
           const val = textInput.value.trim();
           answerText = val || 'Not answered';
         } else if (selectInput) {
-          const val = selectInput.value;
-          if (!val) {
-            answerText = 'Not answered';
-          } else if (val.toLowerCase().startsWith('other')) {
-            const otherInput = card.querySelector('.other-text-input');
-            const otherVal = otherInput ? otherInput.value.trim() : '';
-            answerText = otherVal ? `Other: ${otherVal}` : 'Other';
+          if (selectInput.disabled) {
+            answerText = 'Not applicable';
           } else {
-            answerText = val;
+            const val = selectInput.value;
+            if (!val) {
+              answerText = 'Not answered';
+            } else if (val.toLowerCase().startsWith('other')) {
+              const otherInput = card.querySelector('.other-text-input');
+              const otherVal = otherInput ? otherInput.value.trim() : '';
+              answerText = otherVal ? `Other: ${otherVal}` : 'Other';
+            } else {
+              answerText = val;
+            }
           }
         } else if (checkboxes.length > 0) {
           const checked = Array.from(checkboxes).filter(cb => cb.checked);
@@ -628,6 +663,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 2. Validate required select (dropdown) elements
     const selects = stepEl.querySelectorAll('select[required]');
     selects.forEach(select => {
+      if (select.disabled) return; // Skip disabled / not-applicable dropdowns
       const card = select.closest('.card');
       if (select.value === '') {
         isValid = false;
@@ -1260,15 +1296,19 @@ document.addEventListener('DOMContentLoaded', function () {
         if (textInput) {
           answerText = textInput.value.trim();
         } else if (selectEl) {
-          const selectedVal = selectEl.value;
-          if (selectedVal.toLowerCase().startsWith('other')) {
-            const otherTargetId  = selectEl.getAttribute('data-other-target');
-            const otherContainer = document.getElementById(otherTargetId);
-            const otherInput     = otherContainer ? otherContainer.querySelector('.other-text-input') : null;
-            const otherVal = otherInput ? otherInput.value.trim() : '';
-            answerText = otherVal ? `Other: ${otherVal}` : 'Other';
+          if (selectEl.disabled) {
+            answerText = 'Not applicable';
           } else {
-            answerText = selectedVal;
+            const selectedVal = selectEl.value;
+            if (selectedVal.toLowerCase().startsWith('other')) {
+              const otherTargetId  = selectEl.getAttribute('data-other-target');
+              const otherContainer = document.getElementById(otherTargetId);
+              const otherInput     = otherContainer ? otherContainer.querySelector('.other-text-input') : null;
+              const otherVal = otherInput ? otherInput.value.trim() : '';
+              answerText = otherVal ? `Other: ${otherVal}` : 'Other';
+            } else {
+              answerText = selectedVal;
+            }
           }
         } else if (checkboxes.length > 0) {
           const checkedValues = [];

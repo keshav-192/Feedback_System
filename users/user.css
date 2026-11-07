@@ -2498,3 +2498,29 @@ body {
     padding: 0 4px;
   }
 }
+
+/* Card Disabled / Not Applicable state for hierarchical dependent questions */
+.card.card-not-applicable {
+  opacity: 0.65;
+  background-color: #f8fafc;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.card.card-not-applicable .question-title {
+  color: #64748b;
+}
+
+.card.card-not-applicable .select-input {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.card.card-not-applicable .select-arrow {
+  opacity: 0.4;
+}
+
+.card.card-not-applicable .required-asterisk {
+  display: none;
+}

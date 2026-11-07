@@ -53,15 +53,65 @@ $_SESSION['last_form_submit_time'] = $now;
 // --- SECURITY: Server-Side Validation against DOM Tampering ---
 $options_json_path = '../options.json';
 $option_groups = [];
+$option_group_parents = [];
 if (file_exists($options_json_path)) {
     $options_data = json_decode(file_get_contents($options_json_path), true);
     if (is_array($options_data)) {
         foreach ($options_data as $group) {
             if (isset($group['group_name'])) {
                 $option_groups[$group['group_name']] = isset($group['options']) ? $group['options'] : [];
+                if (!empty($group['parent_group'])) {
+                    $option_group_parents[$group['group_name']] = trim($group['parent_group']);
+                }
             }
         }
     }
+}
+
+/**
+ * Checks if a dependent question is applicable under hierarchical rules.
+ * Returns false if the question has a parent group, and the parent question's
+ * selected answer matches zero options in this question's option set.
+ */
+function isQuestionApplicable($q, $db_questions, $response_data, $option_groups, $option_group_parents) {
+    $group_id = isset($q['option_group_id']) ? trim($q['option_group_id']) : null;
+    if (!$group_id || !isset($option_group_parents[$group_id])) {
+        return true; // Independent question, always applicable
+    }
+
+    $parent_group_name = $option_group_parents[$group_id];
+
+    // Find the parent question in the form that uses $parent_group_name
+    $parent_q_text = null;
+    foreach ($db_questions as $candidate) {
+        if (isset($candidate['option_group_id']) && trim($candidate['option_group_id']) === $parent_group_name) {
+            $parent_q_text = trim($candidate['question']);
+            break;
+        }
+    }
+
+    // If parent question is missing or not answered, child cannot be applicable
+    if (!$parent_q_text || !isset($response_data[$parent_q_text])) {
+        return false;
+    }
+
+    $parent_ans = $response_data[$parent_q_text];
+    if ($parent_ans === 'Not answered' || $parent_ans === 'Not applicable' || $parent_ans === '') {
+        return false;
+    }
+
+    // Check if any option in child group applies to parent's selected answer
+    $options = isset($option_groups[$group_id]) ? $option_groups[$group_id] : [];
+    foreach ($options as $opt) {
+        if (empty($opt['parents']) || !is_array($opt['parents'])) {
+            return true; // Universal option without parent restrictions
+        }
+        if (in_array($parent_ans, $opt['parents'])) {
+            return true;
+        }
+    }
+
+    return false; // Zero matching options
 }
 
 $q_stmt = $pdo->prepare("SELECT question, type, option_group_id, is_required, validation_type, max_length FROM questions WHERE form_id = :form_id AND active = 1");
@@ -89,10 +139,23 @@ foreach ($raw_response_data as $k => $v) {
 foreach ($db_questions as $q) {
     if (intval($q['is_required']) === 1) {
         $q_text = trim($q['question']);
-        if (!isset($response_data[$q_text]) || $response_data[$q_text] === 'Not answered' || $response_data[$q_text] === '') {
+
+        // Check if question is applicable under hierarchical dropdown rules
+        if (!isQuestionApplicable($q, $db_questions, $response_data, $option_groups, $option_group_parents)) {
+            // Not applicable: normalize value to 'Not applicable' and skip required validation
+            $response_data[$q_text] = 'Not applicable';
+            continue;
+        }
+
+        if (!isset($response_data[$q_text]) || $response_data[$q_text] === 'Not answered' || $response_data[$q_text] === '' || $response_data[$q_text] === 'Not applicable') {
             logUserSession('Failed', "Submit Error: Tampered data (Required question '$q_text' missing or empty) from IP " . $_SERVER['REMOTE_ADDR']);
             echo json_encode(['success' => false, 'error' => 'Error Submitting Form, Please reload and try to fill the form again.']);
             exit;
+        }
+    } else {
+        $q_text = trim($q['question']);
+        if (!isQuestionApplicable($q, $db_questions, $response_data, $option_groups, $option_group_parents)) {
+            $response_data[$q_text] = 'Not applicable';
         }
     }
 }
@@ -208,7 +271,7 @@ foreach ($response_data as $q_text_clean => $answer) {
     }
 
     // 3. Check Valid Options Bypass
-    if ($answer !== 'Not answered' && in_array($type, ['select', 'radio', 'checkbox', 'rating', 'linear_scale', 'radio_grid', 'checkbox_grid', 'slider_grid'])) {
+    if ($answer !== 'Not answered' && $answer !== 'Not applicable' && in_array($type, ['select', 'radio', 'checkbox', 'rating', 'linear_scale', 'radio_grid', 'checkbox_grid', 'slider_grid'])) {
             if ($group_id && isset($option_groups[$group_id])) {
                 $allowed_options = [];
                 $has_other = false;
