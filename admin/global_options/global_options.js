@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (parentSearchInput && parentGroupSelect) {
         parentSearchInput.value = parentGroupSelect.value || '';
         if (parentSearchClear) {
-          parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+          parentSearchClear.style.display = parentSearchInput.value ? 'flex' : 'none';
         }
       }
     } else {
@@ -494,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function selectParentOption(groupName) {
     if (parentSearchInput) parentSearchInput.value = groupName;
-    if (parentSearchClear) parentSearchClear.style.display = groupName ? 'block' : 'none';
+    if (parentSearchClear) parentSearchClear.style.display = groupName ? 'flex' : 'none';
     if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
 
     if (parentGroupSelect) {
@@ -512,7 +512,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const val = this.value.trim();
     renderParentSearchDropdown(val);
     parentSearchDropdown?.classList.add('show');
-    if (parentSearchClear) parentSearchClear.style.display = val ? 'block' : 'none';
+    if (parentSearchClear) parentSearchClear.style.display = val ? 'flex' : 'none';
 
     // If cleared completely by typing/backspace, reset parent to None
     if (!val && parentGroupSelect && parentGroupSelect.value !== '') {
@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (parentSearchInput && parentGroupSelect) {
         parentSearchInput.value = parentGroupSelect.value || '';
         if (parentSearchClear) {
-          parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+          parentSearchClear.style.display = parentSearchInput.value ? 'flex' : 'none';
         }
       }
     }
@@ -571,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (parentSearchInput) {
       parentSearchInput.value = parentGroupSelect.value || '';
       if (parentSearchClear) {
-        parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+        parentSearchClear.style.display = parentSearchInput.value ? 'flex' : 'none';
       }
     }
   }
@@ -713,7 +713,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (parentSearchInput && parentSearchInput.value !== parentName) {
       parentSearchInput.value = parentName || '';
       if (parentSearchClear) {
-        parentSearchClear.style.display = parentName ? 'block' : 'none';
+        parentSearchClear.style.display = parentName ? 'flex' : 'none';
       }
     }
     if (!parentName) {
@@ -803,7 +803,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (parentGroupSelect) parentGroupSelect.value = parentGroup;
     setParentMode('search'); // By default: Search mode
     if (parentSearchInput) parentSearchInput.value = parentGroup;
-    if (parentSearchClear) parentSearchClear.style.display = parentGroup ? 'block' : 'none';
+    if (parentSearchClear) parentSearchClear.style.display = parentGroup ? 'flex' : 'none';
     if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
 
     if (parentGroup) {

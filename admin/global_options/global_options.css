@@ -580,6 +580,8 @@
 }
 
 #add-option-modal .form-control {
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 13.5px;
@@ -619,8 +621,11 @@
   z-index: 2;
 }
 
-#add-option-modal input.has-search-icon {
-  padding-left: 35px !important;
+#add-option-modal #parent-search-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding-left: 36px !important;
+  padding-right: 36px !important;
 }
 
 .parent-search-clear {
@@ -628,25 +633,39 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: none;
   align-items: center;
   justify-content: center;
   background: #e2e8f0;
   color: #475569;
-  font-size: 15px;
-  line-height: 1;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
-  z-index: 2;
+  z-index: 5;
+  padding: 0;
+  border: none;
+}
+
+.parent-search-clear[style*="display: block"],
+.parent-search-clear[style*="display: inline-block"],
+.parent-search-clear[style*="display: flex"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.parent-search-clear svg {
+  display: block;
+  pointer-events: none;
 }
 
 .parent-search-clear:hover {
   background: #cbd5e1;
   color: #0f172a;
+  transform: translateY(-50%) scale(1.1);
 }
 
 .parent-hint-text {
@@ -733,11 +752,13 @@
 
 .choice-row input.opt-label-input {
   flex: 1;
+  min-width: 0;
+  width: auto;
   background: #ffffff;
 }
 
 .choice-row input.opt-weight-input {
-  width: 85px;
+  width: 85px !important;
   flex: none;
   text-align: center;
   font-weight: 600;
