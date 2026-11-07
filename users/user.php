@@ -295,7 +295,30 @@ if ($total_steps === 0) {
                   $blocks[] = $current_matrix;
               }
 
+              $active_cond_key = null;
               foreach ($blocks as $block):
+                $first_q = ($block['type'] === 'matrix') ? $block['questions'][0] : $block['question'];
+                $block_dep_id = !empty($first_q['depends_on_question_id']) ? (int)$first_q['depends_on_question_id'] : null;
+                $block_dep_val = !empty($first_q['depends_on_value']) ? trim($first_q['depends_on_value']) : null;
+                $block_sub_name = !empty($first_q['sub_section_name']) ? trim($first_q['sub_section_name']) : null;
+                $block_is_cond = ($block_dep_id !== null && $block_dep_val !== null);
+                $block_cond_key = $block_is_cond ? ($block_dep_id . '||' . $block_dep_val . '||' . $block_sub_name) : null;
+
+                if ($active_cond_key !== $block_cond_key) {
+                    if ($active_cond_key !== null) {
+                        echo '</div>'; // Close previous conditional-sub-section
+                    }
+                    if ($block_cond_key !== null) {
+                        echo '<div class="conditional-sub-section" data-depends-on="q-' . $block_dep_id . '" data-depends-value="' . htmlspecialchars($block_dep_val, ENT_QUOTES) . '" style="display: none; margin-bottom: 16px;">';
+                        if (!empty($block_sub_name)) {
+                            echo '<div class="card sub-section-title-card" style="border-left: 4px solid #8b5cf6; background: #faf5ff; padding: 14px 20px; margin-bottom: 16px;">';
+                            echo '<h3 style="margin: 0; font-size: 16.5px; font-weight: 600; color: #5b21b6;">' . htmlspecialchars($block_sub_name) . '</h3>';
+                            echo '</div>';
+                        }
+                    }
+                    $active_cond_key = $block_cond_key;
+                }
+
                 if ($block['type'] === 'matrix'):
                   $subtype = $block['subtype'] ?? 'radio_grid';
                   $group_id = $block['option_group_id'];
@@ -744,7 +767,11 @@ if ($total_steps === 0) {
 
               <?php endif; ?>
             <?php endif; // End block check ?>
-          <?php endforeach; // End blocks loop ?>
+          <?php endforeach; // End blocks loop 
+            if ($active_cond_key !== null) {
+                echo '</div>'; // Close any unclosed conditional-sub-section
+            }
+          ?>
 
             <!-- Navigation Buttons -->
             <div class="nav-buttons-container">

@@ -371,6 +371,74 @@ document.addEventListener('DOMContentLoaded', function () {
 
   initHierarchicalDropdowns();
 
+  // --- CONDITIONAL SUB-SECTIONS RUNTIME ---
+  function initConditionalSubSections() {
+    const subSections = document.querySelectorAll('.conditional-sub-section');
+    if (subSections.length === 0) return;
+
+    function syncAllConditionalSubSections() {
+      subSections.forEach(sub => {
+        const dependsOnCardId = sub.getAttribute('data-depends-on');
+        const expectedVal = sub.getAttribute('data-depends-value');
+        if (!dependsOnCardId || !expectedVal) return;
+
+        const parentCard = document.getElementById(dependsOnCardId);
+        if (!parentCard) return;
+
+        let parentVal = '';
+        const checkedRadio = parentCard.querySelector('input[type="radio"]:checked');
+        const select = parentCard.querySelector('select');
+        const checkedBoxes = parentCard.querySelectorAll('input[type="checkbox"]:checked');
+
+        if (checkedRadio) {
+          parentVal = checkedRadio.value;
+        } else if (select) {
+          parentVal = select.value;
+        } else if (checkedBoxes.length > 0) {
+          const vals = Array.from(checkedBoxes).map(cb => cb.value);
+          if (vals.some(v => v.trim().toLowerCase() === expectedVal.trim().toLowerCase())) {
+            parentVal = expectedVal;
+          }
+        }
+
+        const shouldShow = (parentVal && parentVal.trim().toLowerCase() === expectedVal.trim().toLowerCase());
+
+        if (shouldShow) {
+          if (sub.style.display === 'none') {
+            sub.style.display = 'block';
+          }
+        } else {
+          if (sub.style.display !== 'none') {
+            sub.style.display = 'none';
+            clearSubSectionInputs(sub);
+          }
+        }
+      });
+    }
+
+    function clearSubSectionInputs(sub) {
+      sub.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(inp => {
+        inp.value = '';
+      });
+      sub.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(inp => {
+        inp.checked = false;
+      });
+      sub.querySelectorAll('select').forEach(sel => {
+        sel.value = '';
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      sub.querySelectorAll('.card-error').forEach(card => card.classList.remove('card-error'));
+    }
+
+    document.querySelectorAll('input[type="radio"], select, input[type="checkbox"]').forEach(input => {
+      input.addEventListener('change', syncAllConditionalSubSections);
+    });
+
+    syncAllConditionalSubSections();
+  }
+
+  initConditionalSubSections();
+
   // Clear card error on any select change
   document.querySelectorAll('select').forEach(sel => {
     sel.addEventListener('change', () => {
@@ -554,6 +622,16 @@ document.addEventListener('DOMContentLoaded', function () {
       .replace(/'/g, "&#039;");
   }
 
+  // Helper to check if an element is currently visible (and not inside a hidden conditional sub-section)
+  function isElementVisibleInDOM(el) {
+    if (!el) return false;
+    const conditionalSub = el.closest('.conditional-sub-section');
+    if (conditionalSub && conditionalSub.style.display === 'none') {
+      return false;
+    }
+    return true;
+  }
+
   // Validate inputs within a specific step
   function validateStep(step) {
     const stepEl = document.getElementById(`step-${step}`);
@@ -569,6 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1. Validate required text inputs, email inputs, and textareas (includes dynamic other inputs if required)
     const textInputs = stepEl.querySelectorAll('input[type="text"][required], input[type="email"][required], textarea[required]');
     textInputs.forEach(input => {
+      if (!isElementVisibleInDOM(input)) return;
       const card = input.closest('.card');
       if (input.value.trim() === '') {
         isValid = false;
@@ -588,6 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allowedDomains = ['vignan.ac.in', 'gmail.com', 'yahoo.com', 'yahoo.in', 'outlook.com', 'hotmail.com'];
     
     emailInputs.forEach(input => {
+      if (!isElementVisibleInDOM(input)) return;
       const card = input.closest('.card');
       const val = input.value.trim();
       if (val !== '') {
@@ -619,6 +699,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1c. Validate exact lengths for Register No, Emp ID, and combined Register No / Emp ID
     const registerInputs = stepEl.querySelectorAll('.register-no-input');
     registerInputs.forEach(input => {
+      if (!isElementVisibleInDOM(input)) return;
       const card = input.closest('.card');
       const val = input.value.trim();
       if (val !== '' && val.length !== 10) {
@@ -632,6 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const employeeInputs = stepEl.querySelectorAll('.emp-id-input');
     employeeInputs.forEach(input => {
+      if (!isElementVisibleInDOM(input)) return;
       const card = input.closest('.card');
       const val = input.value.trim();
       if (val !== '' && val.length !== 5) {
@@ -645,6 +727,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const regEmpInputsList = stepEl.querySelectorAll('.reg-emp-input');
     regEmpInputsList.forEach(input => {
+      if (!isElementVisibleInDOM(input)) return;
       const card = input.closest('.card');
       const val = input.value.trim();
       if (val !== '') {
@@ -663,7 +746,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 2. Validate required select (dropdown) elements
     const selects = stepEl.querySelectorAll('select[required]');
     selects.forEach(select => {
-      if (select.disabled) return; // Skip disabled / not-applicable dropdowns
+      if (select.disabled || !isElementVisibleInDOM(select)) return; // Skip disabled / hidden dropdowns
       const card = select.closest('.card');
       if (select.value === '') {
         isValid = false;
@@ -675,6 +758,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 3. Validate Checkbox groups
     const requiredCheckboxCards = stepEl.querySelectorAll('.card[data-required-checkbox]');
     requiredCheckboxCards.forEach(card => {
+      if (!isElementVisibleInDOM(card)) return;
       const checkedCheckboxes = card.querySelectorAll('input[type="checkbox"]:checked');
       if (checkedCheckboxes.length === 0) {
         isValid = false;
@@ -696,6 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 4. Validate Rating (Radio) groups and normal Radio groups
     const requiredRadioCards = stepEl.querySelectorAll('.card[data-required-radio], .card[data-required-radio-option]');
     requiredRadioCards.forEach(card => {
+      if (!isElementVisibleInDOM(card)) return;
       const checkedRadio = card.querySelector('input[type="radio"]:checked');
       if (!checkedRadio) {
         isValid = false;
@@ -717,6 +802,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 5. Validate Matrix (Radio, Checkbox, Slider) rows with Row-Level Precision
     const requiredMatrixRows = stepEl.querySelectorAll('.matrix-row[data-required-matrix-row], .matrix-row[data-required-matrix-checkbox], .matrix-row[data-required-matrix-slider]');
     requiredMatrixRows.forEach(row => {
+      if (!isElementVisibleInDOM(row)) return;
       let isRowValid = false;
       if (row.hasAttribute('data-required-matrix-row')) {
         isRowValid = !!row.querySelector('input[type="radio"]:checked');
@@ -1087,6 +1173,10 @@ document.addEventListener('DOMContentLoaded', function () {
               if (node.nodeType === Node.TEXT_NODE) rowQuestionText += node.textContent;
             });
             rowQuestionText = rowQuestionText.trim();
+            if (!isElementVisibleInDOM(row)) {
+              responseObj[rowQuestionText] = 'Not applicable';
+              return;
+            }
             let rowAnswer = 'Not answered';
             const checkedRadio = row.querySelector('input[type="radio"]:checked');
             const checkedCbs = row.querySelectorAll('input[type="checkbox"]:checked');
@@ -1120,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const questionTitleEl = card.querySelector('.question-title');
-        if (!questionTitleEl) return; // skip non-question elements
+        if (!questionTitleEl || !isElementVisibleInDOM(card)) return; // skip non-question or hidden elements
 
         // ── Extract question text (strips the required asterisk span) ──
         let questionText = '';
@@ -1261,6 +1351,10 @@ document.addEventListener('DOMContentLoaded', function () {
               if (node.nodeType === Node.TEXT_NODE) rowQuestionText += node.textContent;
             });
             rowQuestionText = rowQuestionText.trim();
+            if (!isElementVisibleInDOM(row)) {
+              responseObj[rowQuestionText] = 'Not applicable';
+              return;
+            }
             let rowAnswer = 'Not answered';
             const checkedRadio = row.querySelector('input[type="radio"]:checked');
             const checkedCbs = row.querySelectorAll('input[type="checkbox"]:checked');
@@ -1286,6 +1380,11 @@ document.addEventListener('DOMContentLoaded', function () {
           if (node.nodeType === Node.TEXT_NODE) questionText += node.textContent;
         });
         questionText = questionText.trim();
+
+        if (!isElementVisibleInDOM(card)) {
+          responseObj[questionText] = 'Not applicable';
+          return;
+        }
 
         let answerText = '';
         const textInput  = card.querySelector('input[type="text"]:not(.other-text-input), input[type="email"], textarea');

@@ -222,3 +222,112 @@ input:disabled + .toggle-slider {
 input:checked + .toggle-slider:before {
   transform: translateX(20px);
 }
+
+/* ==========================================================================
+   Conditional Sub-Section Styles
+   ========================================================================== */
+.builder-sub-section-card {
+  background: #fdfaff;
+  border: 1.5px dashed #c4b5fd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.builder-sub-section-card:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.08);
+}
+
+.sub-section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.sub-section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sub-section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6d28d9;
+  background: #ede9fe;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.sub-section-rule-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: #4b5563;
+}
+
+.sub-section-rule-row select {
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid #c4b5fd;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #1f2937;
+  max-width: 320px;
+}
+
+.sub-section-rule-row select:focus {
+  border-color: #7c3aed;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
+}
+
+.sub-section-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 10px;
+  border-left: 2px solid #ddd6fe;
+  margin-top: 4px;
+}
+
+.btn-add-sub-question {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6d28d9;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+  border-radius: 5px;
+  padding: 7px 14px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.15s ease;
+}
+
+.btn-add-sub-question:hover {
+  background: #ddd6fe;
+  color: #5b21b6;
+}
+

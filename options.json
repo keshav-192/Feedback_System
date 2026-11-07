@@ -1971,5 +1971,36 @@
             }
         ],
         "group_id": "opt_grp_074"
+    },
+    {
+        "group_name": "test",
+        "parent_group": "5-Point Quality Scale",
+        "options": [
+            {
+                "label": "hello",
+                "weight": 1,
+                "parents": [
+                    "Excellent",
+                    "Good"
+                ]
+            },
+            {
+                "label": "how",
+                "weight": 1,
+                "parents": [
+                    "Excellent",
+                    "Good"
+                ]
+            },
+            {
+                "label": "bad",
+                "weight": 1,
+                "parents": [
+                    "Below Average",
+                    "Poor"
+                ]
+            }
+        ],
+        "group_id": "opt_grp_075"
     }
 ]

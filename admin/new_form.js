@@ -302,6 +302,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     
     actionsRow.appendChild(addQuestionBtn);
+
+    const addSubSectionBtn = document.createElement('button');
+    addSubSectionBtn.type = 'button';
+    addSubSectionBtn.className = 'btn-secondary btn-conditional-block';
+    addSubSectionBtn.style.color = '#7c3aed';
+    addSubSectionBtn.style.borderColor = '#c4b5fd';
+    addSubSectionBtn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Add Conditional Sub-Section`;
+    addSubSectionBtn.addEventListener('click', () => {
+      addConditionalSubSection(questionsList);
+    });
+    actionsRow.appendChild(addSubSectionBtn);
     
     // Special Buttons for Section 1 (only if no sections exist yet)
     if (formBuilderContainer.children.length === 0) {
@@ -350,9 +361,189 @@ document.addEventListener("DOMContentLoaded", function() {
     updateSectionNumbers(); // Re-number after adding
   }
 
+  // --- CONDITIONAL SUB-SECTION LOGIC ---
+  function getEligibleParentQuestions(currentSubSection) {
+    const eligible = [];
+    const allQuestions = Array.from(formBuilderContainer.querySelectorAll('.builder-question-card'));
+    
+    for (const qCard of allQuestions) {
+      if (currentSubSection.contains(qCard)) continue;
+
+      const pos = qCard.compareDocumentPosition(currentSubSection);
+      if (pos & Node.DOCUMENT_POSITION_FOLLOWING) {
+        const typeSelect = qCard.querySelector('.q-type-select');
+        const optInput = qCard.querySelector('.q-optionset-input');
+        const titleInput = qCard.querySelector('.q-title-input');
+        
+        const qText = titleInput ? titleInput.value.trim() : '';
+        const qType = typeSelect ? typeSelect.value : '';
+        const optSet = optInput ? optInput.value.trim() : '';
+
+        if ((qType === 'optionset' || qType === 'rating' || qType === 'linear_scale') && optSet) {
+          eligible.push({
+            uid: qCard.dataset.clientUid,
+            text: qText || '(Untitled Question)',
+            optionSet: optSet
+          });
+        }
+      }
+    }
+    return eligible;
+  }
+
+  function refreshParentQuestionOptions(subSectionCard, selectEl, valSelectEl) {
+    const currentVal = selectEl.value;
+    const eligible = getEligibleParentQuestions(subSectionCard);
+
+    selectEl.innerHTML = '<option value="">-- Select Parent Question --</option>';
+    eligible.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.uid;
+      opt.textContent = `${item.text} [${item.optionSet}]`;
+      opt.dataset.optionSet = item.optionSet;
+      selectEl.appendChild(opt);
+    });
+
+    if (currentVal && eligible.some(e => e.uid === currentVal)) {
+      selectEl.value = currentVal;
+    } else {
+      selectEl.value = '';
+      if (valSelectEl) valSelectEl.innerHTML = '<option value="">-- Select Matching Option --</option>';
+    }
+  }
+
+  function populateMatchingValues(selectEl, valSelectEl) {
+    const selectedUid = selectEl.value;
+    valSelectEl.innerHTML = '<option value="">-- Select Matching Option --</option>';
+    if (!selectedUid) return;
+
+    const selectedOpt = selectEl.options[selectEl.selectedIndex];
+    const optSetName = selectedOpt ? selectedOpt.dataset.optionSet : '';
+    if (!optSetName) return;
+
+    const group = optionsData.find(g => g.group_name === optSetName);
+    if (group && group.options) {
+      group.options.forEach(choice => {
+        const opt = document.createElement('option');
+        opt.value = choice.label;
+        opt.textContent = choice.label;
+        valSelectEl.appendChild(opt);
+      });
+    }
+  }
+
+  function addConditionalSubSection(container) {
+    const subCard = document.createElement('div');
+    subCard.className = 'builder-sub-section-card';
+    subCard.dataset.subSectionId = 'sub_' + Math.random().toString(36).substr(2, 9);
+
+    const header = document.createElement('div');
+    header.className = 'sub-section-header';
+
+    const titleRow = document.createElement('div');
+    titleRow.className = 'sub-section-title-row';
+
+    const badgeAndTitle = document.createElement('div');
+    badgeAndTitle.style.display = 'flex';
+    badgeAndTitle.style.alignItems = 'center';
+    badgeAndTitle.style.gap = '10px';
+    badgeAndTitle.style.flex = '1';
+
+    const badge = document.createElement('span');
+    badge.className = 'sub-section-badge';
+    badge.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Conditional Block`;
+
+    const titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.className = 'form-control sub-section-title-input';
+    titleInput.placeholder = 'Sub-Section Title (e.g. Hostel Feedback)';
+    titleInput.style.maxWidth = '360px';
+    titleInput.style.fontWeight = '600';
+
+    badgeAndTitle.appendChild(badge);
+    badgeAndTitle.appendChild(titleInput);
+
+    const delSubBtn = document.createElement('button');
+    delSubBtn.className = 'btn-danger-outline';
+    delSubBtn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Delete Sub-Section`;
+    delSubBtn.addEventListener('click', () => {
+      subCard.remove();
+      updateSaveButtonVisibility();
+    });
+
+    titleRow.appendChild(badgeAndTitle);
+    titleRow.appendChild(delSubBtn);
+
+    const ruleRow = document.createElement('div');
+    ruleRow.className = 'sub-section-rule-row';
+
+    const ruleLabel = document.createElement('strong');
+    ruleLabel.innerHTML = `<svg width="14" height="14" fill="none" stroke="#7c3aed" viewBox="0 0 24 24" style="vertical-align: -2px; margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Show this block when:`;
+
+    const parentQSelect = document.createElement('select');
+    parentQSelect.className = 'form-control sub-parent-q-select';
+
+    const equalsSpan = document.createElement('span');
+    equalsSpan.textContent = 'equals';
+    equalsSpan.style.fontWeight = '600';
+    equalsSpan.style.color = '#7c3aed';
+
+    const parentValSelect = document.createElement('select');
+    parentValSelect.className = 'form-control sub-parent-val-select';
+    parentValSelect.innerHTML = '<option value="">-- Select Matching Option --</option>';
+
+    const refreshDropdown = () => {
+      refreshParentQuestionOptions(subCard, parentQSelect, parentValSelect);
+    };
+    parentQSelect.addEventListener('focus', refreshDropdown);
+    parentQSelect.addEventListener('click', refreshDropdown);
+
+    parentQSelect.addEventListener('change', () => {
+      populateMatchingValues(parentQSelect, parentValSelect);
+    });
+
+    ruleRow.appendChild(ruleLabel);
+    ruleRow.appendChild(parentQSelect);
+    ruleRow.appendChild(equalsSpan);
+    ruleRow.appendChild(parentValSelect);
+
+    header.appendChild(titleRow);
+    header.appendChild(ruleRow);
+
+    const subQuestionsList = document.createElement('div');
+    subQuestionsList.className = 'sub-section-questions-list';
+
+    const addSubQBtn = document.createElement('button');
+    addSubQBtn.type = 'button';
+    addSubQBtn.className = 'btn-add-sub-question';
+    addSubQBtn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg> Add Question to this Sub-Section`;
+    addSubQBtn.addEventListener('click', () => {
+      const existingCards = subQuestionsList.querySelectorAll('.builder-question-card');
+      for (let i = 0; i < existingCards.length; i++) {
+        const input = existingCards[i].querySelector('.q-title-input');
+        if (input && input.value.trim() === '') {
+           showInlineError(input, "Please enter the question text before adding another question.");
+           input.focus();
+           return;
+        }
+      }
+      addQuestion(subQuestionsList);
+    });
+
+    subCard.appendChild(header);
+    subCard.appendChild(subQuestionsList);
+    subCard.appendChild(addSubQBtn);
+
+    container.appendChild(subCard);
+    refreshDropdown();
+    addQuestion(subQuestionsList);
+    updateSaveButtonVisibility();
+  }
+
   function addQuestion(container, compulsoryType = false) {
     const qCard = document.createElement('div');
     qCard.className = 'builder-question-card';
+    qCard.dataset.clientUid = 'quid_' + Math.random().toString(36).substr(2, 9);
     if (compulsoryType) qCard.classList.add('compulsory');
 
     const header = document.createElement('div');
@@ -838,6 +1029,38 @@ document.addEventListener("DOMContentLoaded", function() {
         break;
       }
 
+      // Validate conditional sub-sections in this section
+      const subSections = section.querySelectorAll('.builder-sub-section-card');
+      for (let s = 0; s < subSections.length; s++) {
+        const sub = subSections[s];
+        const pSelect = sub.querySelector('.sub-parent-q-select');
+        const vSelect = sub.querySelector('.sub-parent-val-select');
+        const tInput = sub.querySelector('.sub-section-title-input');
+        const subTitle = tInput && tInput.value.trim() ? `"${tInput.value.trim()}"` : `Block ${s + 1}`;
+
+        if (!pSelect || !pSelect.value) {
+          isValid = false;
+          errorMessage = `Please select a parent question for Conditional Sub-Section ${subTitle} in Section ${sectionNum}.`;
+          if (pSelect) pSelect.focus();
+          break;
+        }
+
+        if (!vSelect || !vSelect.value) {
+          isValid = false;
+          errorMessage = `Please select the matching option value for Conditional Sub-Section ${subTitle} in Section ${sectionNum}.`;
+          if (vSelect) vSelect.focus();
+          break;
+        }
+
+        const subQuestions = sub.querySelectorAll('.builder-question-card');
+        if (subQuestions.length === 0) {
+          isValid = false;
+          errorMessage = `Conditional Sub-Section ${subTitle} in Section ${sectionNum} has no questions. Please add at least one question or delete the sub-section.`;
+          break;
+        }
+      }
+      if (!isValid) break;
+
       for (let j = 0; j < questions.length; j++) {
         const qCard = questions[j];
         const qInput = qCard.querySelector('.q-title-input');
@@ -898,6 +1121,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const qType = qCard.querySelector('.q-type-select').value;
         
         const qData = {
+          client_uid: qCard.dataset.clientUid || ('quid_' + Math.random().toString(36).substr(2, 9)),
           text: qText,
           required: qRequired,
           is_filter: qFilter,
@@ -910,6 +1134,22 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (qType === 'text' || qType === 'textarea') {
           qData.validation_type = qCard.querySelector('.q-validation-select').value;
           qData.max_length = qCard.querySelector('.q-maxlength-input').value.trim();
+        }
+
+        // Check if question belongs to a conditional sub-section
+        const parentSubSection = qCard.closest('.builder-sub-section-card');
+        if (parentSubSection) {
+          const pSelect = parentSubSection.querySelector('.sub-parent-q-select');
+          const vSelect = parentSubSection.querySelector('.sub-parent-val-select');
+          const tInput = parentSubSection.querySelector('.sub-section-title-input');
+
+          qData.depends_on_client_uid = pSelect && pSelect.value ? pSelect.value : null;
+          qData.depends_on_value = vSelect && vSelect.value ? vSelect.value : null;
+          qData.sub_section_name = tInput && tInput.value.trim() ? tInput.value.trim() : null;
+        } else {
+          qData.depends_on_client_uid = null;
+          qData.depends_on_value = null;
+          qData.sub_section_name = null;
         }
 
         sectionData.questions.push(qData);

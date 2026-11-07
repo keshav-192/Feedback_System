@@ -71,8 +71,10 @@ try {
 
     // 2. Insert Questions
     $stmtQuestion = $pdo->prepare("INSERT INTO questions 
-        (form_id, question, type, is_required, question_order, step_no, option_group_id, section_name, filter, validation_type, max_length) 
-        VALUES (:form_id, :question, :type, :is_required, :question_order, :step_no, :option_group_id, :section_name, :filter, :validation_type, :max_length)");
+        (form_id, question, type, is_required, question_order, step_no, option_group_id, depends_on_question_id, depends_on_value, sub_section_name, section_name, filter, validation_type, max_length) 
+        VALUES (:form_id, :question, :type, :is_required, :question_order, :step_no, :option_group_id, :depends_on_question_id, :depends_on_value, :sub_section_name, :section_name, :filter, :validation_type, :max_length)");
+
+    $uid_to_db_id = [];
 
     foreach ($payload['sections'] as $sIndex => $section) {
         $step_no = $sIndex + 1; // Visual section order maps to step_no
@@ -124,6 +126,23 @@ try {
                     }
                 }
 
+                // Conditional Sub-Section Dependencies
+                $client_uid = isset($q['client_uid']) ? trim($q['client_uid']) : null;
+                $dep_uid = isset($q['depends_on_client_uid']) && trim($q['depends_on_client_uid']) !== '' ? trim($q['depends_on_client_uid']) : null;
+                $dep_val = isset($q['depends_on_value']) && trim($q['depends_on_value']) !== '' ? trim($q['depends_on_value']) : null;
+                $sub_sec = isset($q['sub_section_name']) && trim($q['sub_section_name']) !== '' ? trim($q['sub_section_name']) : null;
+
+                $depends_on_question_id = null;
+                if ($dep_uid) {
+                    if (!isset($uid_to_db_id[$dep_uid])) {
+                        throw new Exception("Invalid question dependency: Parent question is missing or appears after the dependent block.");
+                    }
+                    $depends_on_question_id = $uid_to_db_id[$dep_uid];
+                    if (empty($dep_val)) {
+                        throw new Exception("Conditional sub-section matching value cannot be empty.");
+                    }
+                }
+
                 $stmtQuestion->execute([
                     'form_id' => $form_id,
                     'question' => $q['text'],
@@ -132,11 +151,19 @@ try {
                     'question_order' => $question_order,
                     'step_no' => $step_no,
                     'option_group_id' => $option_group_id,
+                    'depends_on_question_id' => $depends_on_question_id,
+                    'depends_on_value' => $dep_val,
+                    'sub_section_name' => $sub_sec,
                     'section_name' => $section_name,
                     'filter' => !empty($q['is_filter']) ? 1 : 0,
                     'validation_type' => $validation_type,
                     'max_length' => $max_length
                 ]);
+
+                $inserted_id = (int)$pdo->lastInsertId();
+                if ($client_uid) {
+                    $uid_to_db_id[$client_uid] = $inserted_id;
+                }
             }
         }
     }

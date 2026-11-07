@@ -174,13 +174,15 @@ try {
     }
 
     $stmtInsert = $pdo->prepare("INSERT INTO questions 
-        (form_id, question, type, is_required, question_order, step_no, option_group_id, section_name, filter, active, validation_type, max_length) 
-        VALUES (:form_id, :question, :type, :is_required, :question_order, :step_no, :option_group_id, :section_name, :filter, :active, :validation_type, :max_length)");
+        (form_id, question, type, is_required, question_order, step_no, option_group_id, depends_on_question_id, depends_on_value, sub_section_name, section_name, filter, active, validation_type, max_length) 
+        VALUES (:form_id, :question, :type, :is_required, :question_order, :step_no, :option_group_id, :depends_on_question_id, :depends_on_value, :sub_section_name, :section_name, :filter, :active, :validation_type, :max_length)");
 
     $stmtUpdate = $pdo->prepare("UPDATE questions SET 
         question = :question, type = :type, is_required = :is_required, 
         question_order = :question_order, step_no = :step_no, 
-        option_group_id = :option_group_id, section_name = :section_name, 
+        option_group_id = :option_group_id, depends_on_question_id = :depends_on_question_id, 
+        depends_on_value = :depends_on_value, sub_section_name = :sub_section_name, 
+        section_name = :section_name, 
         filter = :filter, active = :active, validation_type = :validation_type, max_length = :max_length 
         WHERE id = :id AND form_id = :form_id");
 
@@ -239,6 +241,9 @@ try {
                 $is_required = !empty($q['required']) ? 1 : 0;
                 $filter = !empty($q['is_filter']) ? 1 : 0;
                 $new_title = trim($q['text'] ?? '');
+                $depends_on_question_id = !empty($q['depends_on_question_id']) ? (int)$q['depends_on_question_id'] : null;
+                $depends_on_value = isset($q['depends_on_value']) && trim($q['depends_on_value']) !== '' ? trim($q['depends_on_value']) : null;
+                $sub_section_name = isset($q['sub_section_name']) && trim($q['sub_section_name']) !== '' ? trim($q['sub_section_name']) : null;
                 
                 if ($q_id) {
                     $old_q = $old_questions[$q_id] ?? null;
@@ -321,6 +326,9 @@ try {
                             'question_order' => $question_order,
                             'step_no' => $step_no,
                             'option_group_id' => $option_group_id,
+                            'depends_on_question_id' => $depends_on_question_id,
+                            'depends_on_value' => $depends_on_value,
+                            'sub_section_name' => $sub_section_name,
                             'section_name' => $section_name,
                             'filter' => $filter,
                             'active' => $active,
@@ -338,6 +346,9 @@ try {
                             'question_order' => $question_order,
                             'step_no' => $step_no,
                             'option_group_id' => $option_group_id,
+                            'depends_on_question_id' => $depends_on_question_id,
+                            'depends_on_value' => $depends_on_value,
+                            'sub_section_name' => $sub_section_name,
                             'section_name' => $section_name,
                             'filter' => $filter,
                             'active' => $active,
@@ -375,6 +386,9 @@ try {
                         'question_order' => $question_order,
                         'step_no' => $step_no,
                         'option_group_id' => $option_group_id,
+                        'depends_on_question_id' => $depends_on_question_id,
+                        'depends_on_value' => $depends_on_value,
+                        'sub_section_name' => $sub_section_name,
                         'section_name' => $section_name,
                         'filter' => $filter,
                         'active' => $active,

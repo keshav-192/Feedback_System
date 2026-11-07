@@ -69,14 +69,55 @@ if (file_exists($options_json_path)) {
 }
 
 /**
- * Checks if a dependent question is applicable under hierarchical rules.
- * Returns false if the question has a parent group, and the parent question's
- * selected answer matches zero options in this question's option set.
+ * Checks if a dependent question is applicable under hierarchical rules or conditional sub-section rules.
+ * Returns false if the question is conditional and the parent question's answer does not match,
+ * or if matching options are zero.
  */
 function isQuestionApplicable($q, $db_questions, $response_data, $option_groups, $option_group_parents) {
+    // 1. Check Conditional Sub-Section Dependency (depends_on_question_id & depends_on_value)
+    if (!empty($q['depends_on_question_id']) && isset($q['depends_on_value']) && trim($q['depends_on_value']) !== '') {
+        $parent_id = (int)$q['depends_on_question_id'];
+        $expected_val = trim($q['depends_on_value']);
+
+        // Find parent question in $db_questions by id
+        $parent_q_text = null;
+        foreach ($db_questions as $candidate) {
+            if (isset($candidate['id']) && (int)$candidate['id'] === $parent_id) {
+                $parent_q_text = trim($candidate['question']);
+                break;
+            }
+        }
+
+        // If parent question is missing or respondent did not answer it, dependent question is not applicable
+        if (!$parent_q_text || !isset($response_data[$parent_q_text])) {
+            return false;
+        }
+
+        $parent_ans = $response_data[$parent_q_text];
+        if ($parent_ans === 'Not answered' || $parent_ans === 'Not applicable' || $parent_ans === '') {
+            return false;
+        }
+
+        if (is_array($parent_ans)) {
+            $matched = false;
+            foreach ($parent_ans as $ansItem) {
+                if (strcasecmp(trim($ansItem), $expected_val) === 0) {
+                    $matched = true;
+                    break;
+                }
+            }
+            if (!$matched) return false;
+        } else {
+            if (strcasecmp(trim($parent_ans), $expected_val) !== 0) {
+                return false;
+            }
+        }
+    }
+
+    // 2. Check Option Set Hierarchical Dependency (e.g. Program -> Department)
     $group_id = isset($q['option_group_id']) ? trim($q['option_group_id']) : null;
     if (!$group_id || !isset($option_group_parents[$group_id])) {
-        return true; // Independent question, always applicable
+        return true; // Independent question, applicable
     }
 
     $parent_group_name = $option_group_parents[$group_id];
@@ -114,7 +155,7 @@ function isQuestionApplicable($q, $db_questions, $response_data, $option_groups,
     return false; // Zero matching options
 }
 
-$q_stmt = $pdo->prepare("SELECT question, type, option_group_id, is_required, validation_type, max_length FROM questions WHERE form_id = :form_id AND active = 1");
+$q_stmt = $pdo->prepare("SELECT id, question, type, option_group_id, depends_on_question_id, depends_on_value, is_required, validation_type, max_length FROM questions WHERE form_id = :form_id AND active = 1");
 $q_stmt->execute(['form_id' => $form_id]);
 $db_questions = $q_stmt->fetchAll(PDO::FETCH_ASSOC);
 
