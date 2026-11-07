@@ -673,8 +673,12 @@ document.addEventListener("DOMContentLoaded", function() {
       row.style.marginBottom = '6px';
       row.innerHTML = `
         <input type="text" class="form-control opt-label-input" placeholder="Choice Label (e.g. Computer Science)" value="${label ? String(label).replace(/"/g, '&quot;') : ''}" style="flex: 1;">
-        <input type="number" min="1" class="form-control opt-weight-input" placeholder="Weight" value="${weight !== '' ? weight : '1'}" style="width: 80px;">
-        <button type="button" class="btn-danger-outline btn-del-choice-row" style="padding: 6px 10px; font-size: 14px;" title="Remove">&times;</button>
+        <input type="number" min="1" class="form-control weight-input opt-weight-input" placeholder="Weight" value="${weight !== '' ? weight : '1'}" style="width: 85px;">
+        <button type="button" class="btn-del-choice btn-del-choice-row" title="Remove Choice">
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </button>
       `;
       row.querySelector('.btn-del-choice-row').addEventListener('click', () => row.remove());
       bChoicesList.appendChild(row);
@@ -744,8 +748,14 @@ document.addEventListener("DOMContentLoaded", function() {
   function openModal() {
     currentEditGroupId = null;
     currentEditGroupName = "";
-    document.querySelector('#add-option-modal h3').textContent = 'Add New Option Set';
-    saveBtn.textContent = 'Save Option Set';
+    const titleEl = document.querySelector('#add-option-modal h3');
+    if (titleEl) titleEl.textContent = 'Add New Option Set';
+    saveBtn.innerHTML = `
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      Save Option Set
+    `;
     const nameInput = document.getElementById('new-opt-name');
     nameInput.value = '';
     nameInput.readOnly = false;
@@ -774,8 +784,14 @@ document.addEventListener("DOMContentLoaded", function() {
   function openEditModal(opt) {
     currentEditGroupId = opt.group_id;
     currentEditGroupName = opt.group_name;
-    document.querySelector('#add-option-modal h3').textContent = 'Edit Option Set';
-    saveBtn.textContent = 'Update Option Set';
+    const titleEl = document.querySelector('#add-option-modal h3');
+    if (titleEl) titleEl.textContent = 'Edit Option Set';
+    saveBtn.innerHTML = `
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      Update Option Set
+    `;
     const nameInput = document.getElementById('new-opt-name');
     nameInput.value = opt.group_name;
     nameInput.readOnly = true;
@@ -837,10 +853,24 @@ document.addEventListener("DOMContentLoaded", function() {
     modal.style.display = 'none';
   }
 
+  function updateChoiceRowIndexes() {
+    if (!choicesList) return;
+    const rows = choicesList.querySelectorAll('.choice-row');
+    rows.forEach((r, idx) => {
+      const idxEl = r.querySelector('.choice-row-index');
+      if (idxEl) idxEl.textContent = idx + 1;
+    });
+  }
+
   function addChoiceRow(label = '', weight = '', isExisting = false) {
     const row = document.createElement('div');
     row.className = 'choice-row';
     
+    // Index pill
+    const indexBadge = document.createElement('div');
+    indexBadge.className = 'choice-row-index';
+    indexBadge.textContent = choicesList.children.length + 1;
+
     const labelInput = document.createElement('input');
     labelInput.type = 'text';
     labelInput.className = 'form-control opt-label-input';
@@ -850,12 +880,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (label.toLowerCase() === 'other:' || label.toLowerCase() === 'other') {
        labelInput.value = 'Other:';
        labelInput.readOnly = true;
-       labelInput.style.backgroundColor = '#f1f5f9';
-       labelInput.style.color = 'var(--text-secondary)';
+       labelInput.classList.add('is-readonly');
        labelInput.title = 'Fixed term for standardizing "Other" responses';
     } else if (isExisting) {
        labelInput.readOnly = true;
-       labelInput.style.backgroundColor = '#f1f5f9';
+       labelInput.classList.add('is-readonly');
        labelInput.title = 'Existing options cannot be modified to preserve analytics data.';
     }
     
@@ -868,32 +897,44 @@ document.addEventListener("DOMContentLoaded", function() {
     
     if (isExisting) {
         weightInput.readOnly = true;
-        weightInput.style.backgroundColor = '#f1f5f9';
+        weightInput.classList.add('is-readonly');
         weightInput.title = 'Existing option weights cannot be modified.';
     }
 
+    row.appendChild(indexBadge);
     row.appendChild(labelInput);
     row.appendChild(weightInput);
 
     if (!isExisting) {
         const delBtn = document.createElement('button');
-        delBtn.className = 'btn-danger-outline';
-        delBtn.innerHTML = '&times;';
-        delBtn.style.padding = '8px 12px';
+        delBtn.type = 'button';
+        delBtn.className = 'btn-del-choice';
         delBtn.title = 'Remove Choice';
+        delBtn.innerHTML = `
+          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        `;
         delBtn.onclick = () => {
           row.remove();
+          updateChoiceRowIndexes();
           updateOtherButtonState();
         };
         row.appendChild(delBtn);
     } else {
-        // Add a placeholder to keep layout consistent
-        const placeholder = document.createElement('div');
-        placeholder.style.width = '38px';
-        row.appendChild(placeholder);
+        const lockEl = document.createElement('div');
+        lockEl.className = 'choice-lock-indicator';
+        lockEl.title = 'Existing choice locked for historical consistency';
+        lockEl.innerHTML = `
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+        `;
+        row.appendChild(lockEl);
     }
     
     choicesList.appendChild(row);
+    updateChoiceRowIndexes();
     updateOtherButtonState();
   }
 
@@ -1092,7 +1133,12 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(res => res.json())
     .then(data => {
       saveBtn.disabled = false;
-      saveBtn.textContent = currentEditGroupId ? 'Update Option Set' : 'Save Option Set';
+      saveBtn.innerHTML = `
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        ${currentEditGroupId ? 'Update Option Set' : 'Save Option Set'}
+      `;
       
       if (data.success) {
         Swal.fire({
@@ -1111,7 +1157,12 @@ document.addEventListener("DOMContentLoaded", function() {
     .catch(err => {
       console.error(err);
       saveBtn.disabled = false;
-      saveBtn.textContent = currentEditGroupId ? 'Update Option Set' : 'Save Option Set';
+      saveBtn.innerHTML = `
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        ${currentEditGroupId ? 'Update Option Set' : 'Save Option Set'}
+      `;
       Swal.fire('Error', 'Network error occurred.', 'error');
     });
   });
