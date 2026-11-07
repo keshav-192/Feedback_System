@@ -16,6 +16,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Bucket Elements
   const parentGroupSelect = document.getElementById("opt-parent-group");
+  const parentModeToggle = document.getElementById("parent-mode-toggle");
+  const parentSearchWrapper = document.getElementById("parent-search-wrapper");
+  const parentSelectWrapper = document.getElementById("parent-select-wrapper");
+  const parentSearchInput = document.getElementById("parent-search-input");
+  const parentSearchClear = document.getElementById("parent-search-clear");
+  const parentSearchDropdown = document.getElementById("parent-search-dropdown");
+  let currentParentMode = 'search'; // Default mode is search
+
   const flatChoicesContainer = document.getElementById("flat-choices-container");
   const bucketChoicesContainer = document.getElementById("bucket-choices-container");
   const bucketsList = document.getElementById("buckets-list");
@@ -413,6 +421,138 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function setParentMode(mode) {
+    currentParentMode = mode;
+    const btns = parentModeToggle ? parentModeToggle.querySelectorAll('.mode-toggle-btn') : [];
+    btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+
+    if (mode === 'search') {
+      if (parentSearchWrapper) parentSearchWrapper.style.display = 'block';
+      if (parentSelectWrapper) parentSelectWrapper.style.display = 'none';
+      if (parentSearchInput && parentGroupSelect) {
+        parentSearchInput.value = parentGroupSelect.value || '';
+        if (parentSearchClear) {
+          parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+        }
+      }
+    } else {
+      if (parentSearchWrapper) parentSearchWrapper.style.display = 'none';
+      if (parentSelectWrapper) parentSelectWrapper.style.display = 'block';
+      if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
+    }
+  }
+
+  parentModeToggle?.querySelectorAll('.mode-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setParentMode(btn.dataset.mode);
+    });
+  });
+
+  function renderParentSearchDropdown(filterText = '') {
+    if (!parentSearchDropdown) return;
+    parentSearchDropdown.innerHTML = '';
+    const filterLower = filterText.toLowerCase();
+
+    // Option 1: None (Independent Option Set)
+    const noneItem = document.createElement('div');
+    const isNoneSelected = !parentGroupSelect || !parentGroupSelect.value;
+    noneItem.className = 'parent-search-item item-none' + (isNoneSelected ? ' selected' : '');
+    noneItem.innerHTML = `<span>None (Independent Option Set)</span>`;
+    noneItem.addEventListener('click', () => {
+      selectParentOption('');
+    });
+    parentSearchDropdown.appendChild(noneItem);
+
+    // Eligible parent groups (exclude currently edited group ID)
+    const eligible = globalOptions.filter(opt => opt.group_id !== currentEditGroupId && opt.group_name);
+    const matches = filterLower 
+      ? eligible.filter(opt => opt.group_name.toLowerCase().includes(filterLower) || (opt.group_id && opt.group_id.toLowerCase().includes(filterLower)))
+      : eligible;
+
+    if (matches.length === 0 && filterLower) {
+      const emptyItem = document.createElement('div');
+      emptyItem.style.padding = '12px 14px';
+      emptyItem.style.textAlign = 'center';
+      emptyItem.style.color = '#94a3b8';
+      emptyItem.style.fontSize = '13px';
+      emptyItem.textContent = `No option sets matching "${filterText}"`;
+      parentSearchDropdown.appendChild(emptyItem);
+    } else {
+      matches.forEach(opt => {
+        const isSel = parentGroupSelect && parentGroupSelect.value === opt.group_name;
+        const item = document.createElement('div');
+        item.className = 'parent-search-item' + (isSel ? ' selected' : '');
+        item.innerHTML = `<span>${opt.group_name}</span><span class="item-id-badge">${opt.group_id}</span>`;
+        item.addEventListener('click', () => {
+          selectParentOption(opt.group_name);
+        });
+        parentSearchDropdown.appendChild(item);
+      });
+    }
+  }
+
+  function selectParentOption(groupName) {
+    if (parentSearchInput) parentSearchInput.value = groupName;
+    if (parentSearchClear) parentSearchClear.style.display = groupName ? 'block' : 'none';
+    if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
+
+    if (parentGroupSelect) {
+      parentGroupSelect.value = groupName;
+      parentGroupSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  parentSearchInput?.addEventListener('focus', () => {
+    renderParentSearchDropdown(parentSearchInput.value.trim());
+    parentSearchDropdown?.classList.add('show');
+  });
+
+  parentSearchInput?.addEventListener('input', function() {
+    const val = this.value.trim();
+    renderParentSearchDropdown(val);
+    parentSearchDropdown?.classList.add('show');
+    if (parentSearchClear) parentSearchClear.style.display = val ? 'block' : 'none';
+
+    // If cleared completely by typing/backspace, reset parent to None
+    if (!val && parentGroupSelect && parentGroupSelect.value !== '') {
+      parentGroupSelect.value = '';
+      parentGroupSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+
+  parentSearchClear?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectParentOption('');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (parentSearchWrapper && !parentSearchWrapper.contains(e.target)) {
+      parentSearchDropdown?.classList.remove('show');
+      // If user typed something random that doesn't match, restore actual selected parent name
+      if (parentSearchInput && parentGroupSelect) {
+        parentSearchInput.value = parentGroupSelect.value || '';
+        if (parentSearchClear) {
+          parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+        }
+      }
+    }
+  });
+
+  // Keyboard navigation inside search input
+  parentSearchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      parentSearchDropdown?.classList.remove('show');
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const firstItem = parentSearchDropdown?.querySelector('.parent-search-item');
+      if (firstItem) {
+        firstItem.click();
+      }
+    }
+  });
+
   function populateParentGroupDropdown(excludeGroupId = null) {
     if (!parentGroupSelect) return;
     const currentVal = parentGroupSelect.value;
@@ -427,6 +567,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     if (currentVal) {
       parentGroupSelect.value = currentVal;
+    }
+    if (parentSearchInput) {
+      parentSearchInput.value = parentGroupSelect.value || '';
+      if (parentSearchClear) {
+        parentSearchClear.style.display = parentSearchInput.value ? 'block' : 'none';
+      }
     }
   }
 
@@ -560,6 +706,12 @@ document.addEventListener("DOMContentLoaded", function() {
   // Parent Group select change listener
   parentGroupSelect?.addEventListener('change', function() {
     const parentName = this.value;
+    if (parentSearchInput && parentSearchInput.value !== parentName) {
+      parentSearchInput.value = parentName || '';
+      if (parentSearchClear) {
+        parentSearchClear.style.display = parentName ? 'block' : 'none';
+      }
+    }
     if (!parentName) {
       if (flatChoicesContainer) flatChoicesContainer.style.display = 'block';
       if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'none';
@@ -602,6 +754,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     populateParentGroupDropdown();
     if (parentGroupSelect) parentGroupSelect.value = '';
+    setParentMode('search'); // By default: Search mode
+    if (parentSearchInput) parentSearchInput.value = '';
+    if (parentSearchClear) parentSearchClear.style.display = 'none';
+    if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
+
     if (flatChoicesContainer) flatChoicesContainer.style.display = 'block';
     if (bucketChoicesContainer) bucketChoicesContainer.style.display = 'none';
     if (bucketsList) bucketsList.innerHTML = '';
@@ -628,6 +785,10 @@ document.addEventListener("DOMContentLoaded", function() {
     populateParentGroupDropdown(opt.group_id);
     const parentGroup = opt.parent_group || '';
     if (parentGroupSelect) parentGroupSelect.value = parentGroup;
+    setParentMode('search'); // By default: Search mode
+    if (parentSearchInput) parentSearchInput.value = parentGroup;
+    if (parentSearchClear) parentSearchClear.style.display = parentGroup ? 'block' : 'none';
+    if (parentSearchDropdown) parentSearchDropdown.classList.remove('show');
 
     if (parentGroup) {
       if (flatChoicesContainer) flatChoicesContainer.style.display = 'none';

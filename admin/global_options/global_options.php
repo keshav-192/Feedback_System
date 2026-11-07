@@ -63,11 +63,35 @@ if (basename($_SERVER['PHP_SELF']) === basename(__FILE__)) {
       </div>
 
       <div class="form-group" style="margin-bottom: 24px;">
-        <label style="display: block; font-weight: 500; margin-bottom: 6px; color: var(--text-main);">Parent Option Set (Optional)</label>
-        <select id="opt-parent-group" class="form-control" style="width: 100%;">
-          <option value="">None (Independent Option Set)</option>
-        </select>
-        <small class="text-secondary" style="font-size: 12px; margin-top: 4px; display: block;">Select a parent option set (e.g. Program) to organize choices into buckets.</small>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="font-weight: 500; margin: 0; color: var(--text-main);">Parent Option Set (Optional)</label>
+          <div class="parent-mode-toggle" id="parent-mode-toggle">
+            <button type="button" class="mode-toggle-btn active" data-mode="search" title="Search Option Set">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              Search
+            </button>
+            <button type="button" class="mode-toggle-btn" data-mode="dropdown" title="Select from Dropdown List">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              Dropdown
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Search Mode (Default) -->
+        <div id="parent-search-wrapper" class="parent-search-wrapper">
+          <input type="text" id="parent-search-input" class="form-control" placeholder="Search Parent Option Set (e.g. Program)..." autocomplete="off" style="width: 100%; padding-right: 32px;">
+          <span id="parent-search-clear" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #94a3b8; font-size: 18px; display: none; line-height: 1; user-select: none;" title="Clear selection">&times;</span>
+          <div id="parent-search-dropdown" class="parent-search-dropdown"></div>
+        </div>
+
+        <!-- 2. Dropdown Mode -->
+        <div id="parent-select-wrapper" style="display: none;">
+          <select id="opt-parent-group" class="form-control" style="width: 100%;">
+            <option value="">None (Independent Option Set)</option>
+          </select>
+        </div>
+
+        <small class="text-secondary" style="font-size: 12px; margin-top: 6px; display: block;">Select a parent option set (e.g. Program) to organize choices into buckets.</small>
       </div>
 
       <!-- Flat Choices View (When Parent is None) -->
