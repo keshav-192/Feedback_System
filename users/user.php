@@ -574,7 +574,7 @@ if ($total_steps === 0) {
                       data-group-id="<?= htmlspecialchars($group_id) ?>"
                       <?= $is_dependent ? 'data-parent-group="' . htmlspecialchars($parent_group_name) . '" disabled' : '' ?>
                     >
-                      <option value="" disabled selected hidden><?= $is_dependent ? "Please select {$parent_group_name} first" : "Choose option" ?></option>
+                      <option value="" disabled selected hidden>Choose option</option>
                       <?php foreach ($options as $opt): 
                         $parentsAttr = (!empty($opt['parents']) && is_array($opt['parents'])) ? ' data-parents="' . htmlspecialchars(json_encode($opt['parents']), ENT_QUOTES, 'UTF-8') . '"' : '';
                       ?>

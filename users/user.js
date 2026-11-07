@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
           placeholder.disabled = true;
           placeholder.selected = true;
           placeholder.hidden = true;
-          placeholder.textContent = `Please select ${parentGroupName} first`;
+          placeholder.textContent = 'Choose option';
           childSelect.appendChild(placeholder);
 
           if (currentChildVal !== '') {
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
       placeholder.disabled = true;
       placeholder.selected = true;
       placeholder.hidden = true;
-      placeholder.textContent = `Please select ${parentGroupName} first`;
+      placeholder.textContent = 'Choose option';
       childSelect.appendChild(placeholder);
       childSelect.value = '';
     });
