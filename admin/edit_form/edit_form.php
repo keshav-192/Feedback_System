@@ -86,33 +86,106 @@ if (basename($_SERVER['PHP_SELF']) === basename(__FILE__)) {
   </div>
 </div>
 
-<!-- Modal for Editing Title/Desc -->
-<div id="edit-meta-modal" class="modal-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-  <div class="card" style="width: 100%; max-width: 500px; padding: 24px;">
-    <h3 style="margin-bottom: 16px; color: var(--text-main);">Edit Form Details</h3>
-    <div style="margin-bottom: 16px;">
-      <label style="display: block; font-weight: 500; margin-bottom: 8px;">Form Title <span style="color: #e53e3e;">*</span></label>
-      <input type="text" id="edit-form-title-input" class="form-control" style="width: 100%;">
-    </div>
-    <div style="margin-bottom: 24px;">
-      <label style="display: block; font-weight: 500; margin-bottom: 8px;">Description</label>
-      <textarea id="edit-form-desc-input" class="form-control" style="width: 100%; min-height: 80px;"></textarea>
-    </div>
-    <div style="margin-bottom: 24px;">
-      <label style="display: block; font-weight: 500; margin-bottom: 8px;">QR Code Image (Optional)</label>
-      <input type="file" id="edit-form-qr-input" accept="image/*" class="form-control" style="width: 100%; margin-bottom: 8px; padding: 8px;">
-      <div id="edit-qr-preview-container" style="display: none; text-align: center; border: 1px dashed var(--input-border); border-radius: 8px; padding: 8px;">
-        <img id="edit-qr-preview-img" src="" alt="QR Preview" style="max-height: 150px; max-width: 100%; object-fit: contain;">
+<!-- Modal for Editing Title/Desc & Branding -->
+<div id="edit-meta-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content modal-content-modern" style="max-width: 540px; width: 94%; max-height: 90vh; overflow-y: auto;">
+    
+    <!-- Modal Header -->
+    <div class="modal-header-modern">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="modal-icon-badge">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a; line-height: 1.2;">Edit Form Details</h3>
+          <p style="margin: 3px 0 0 0; font-size: 12.5px; color: #64748b;">Update form title, description, and QR branding</p>
+        </div>
       </div>
-      <div style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
-        <input type="checkbox" id="edit-form-remove-qr">
-        <label for="edit-form-remove-qr" style="font-size: 13px; margin: 0; color: var(--text-secondary);">Remove existing QR Code image</label>
+      <button type="button" class="modal-close-btn" id="close-meta-modal-x-btn" title="Close dialog">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body-modern">
+      
+      <!-- Form Title -->
+      <div class="form-group-modern" style="margin-bottom: 20px;">
+        <label class="form-label-modern">
+          <span>Form Title</span>
+          <span class="required-star">*</span>
+        </label>
+        <input type="text" id="edit-form-title-input" class="form-control" placeholder="Enter a descriptive form title...">
       </div>
-      <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Leave blank to keep existing image (if any).</p>
+
+      <!-- Description -->
+      <div class="form-group-modern" style="margin-bottom: 22px;">
+        <label class="form-label-modern">
+          <span>Description</span>
+          <span class="badge-optional">Optional</span>
+        </label>
+        <textarea id="edit-form-desc-input" class="form-control" rows="3" placeholder="Provide instructions or additional context for respondents..."></textarea>
+      </div>
+
+      <!-- QR Code Image -->
+      <div class="form-group-modern" style="margin-bottom: 20px;">
+        <label class="form-label-modern">
+          <span>QR Code Image</span>
+          <span class="badge-optional">Optional</span>
+        </label>
+
+        <!-- Custom Upload Dropzone Card -->
+        <div class="qr-upload-dropzone" id="qr-upload-dropzone">
+          <input type="file" id="edit-form-qr-input" accept="image/*" class="qr-file-input">
+          <div class="qr-upload-content">
+            <div class="qr-upload-icon-circle">
+              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div class="qr-upload-text">
+              <span class="qr-upload-prompt"><strong style="color: var(--primary-color, #b32b2b);">Choose an image</strong> or drag and drop</span>
+              <span class="qr-upload-hint">PNG, JPG, or SVG up to 5MB</span>
+            </div>
+          </div>
+          <div id="qr-file-selected-name" class="qr-file-selected-name" style="display: none;"></div>
+        </div>
+
+        <!-- Preview Container -->
+        <div id="edit-qr-preview-container" class="qr-preview-box" style="display: none; margin-top: 10px;">
+          <div class="qr-preview-header">
+            <span style="font-size: 11.5px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Current QR Preview</span>
+          </div>
+          <img id="edit-qr-preview-img" src="" alt="QR Preview" class="qr-preview-img">
+        </div>
+
+        <!-- Remove Checkbox & Helper -->
+        <div class="qr-remove-checkbox-wrap" style="margin-top: 10px;">
+          <label class="custom-checkbox-label">
+            <input type="checkbox" id="edit-form-remove-qr">
+            <span class="custom-checkbox-indicator"></span>
+            <span class="custom-checkbox-text">Remove existing QR Code image</span>
+          </label>
+          <span class="qr-note-text">Leave blank to keep existing image (if any)</span>
+        </div>
+      </div>
+
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 12px;">
-      <button id="close-meta-modal-btn" class="btn-secondary">Cancel</button>
-      <button id="save-meta-modal-btn" class="btn-primary">Apply</button>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer-modern">
+      <button type="button" class="btn-modal-cancel" id="close-meta-modal-btn">Cancel</button>
+      <button type="button" class="btn-modal-save" id="save-meta-modal-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Apply
+      </button>
     </div>
+
   </div>
 </div>

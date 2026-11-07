@@ -255,3 +255,194 @@
     overflow-y: visible;
   }
 }
+
+/* ==========================================================================
+   Modern Edit Form Details Modal
+   ========================================================================== */
+#edit-meta-modal.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#edit-meta-modal .modal-content-modern {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+#edit-meta-modal .form-control {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13.5px;
+  padding: 9px 13px;
+  color: #1e293b;
+  background: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#edit-meta-modal .form-control:focus {
+  border-color: var(--primary-color, #b32b2b);
+  box-shadow: 0 0 0 3px rgba(179, 43, 43, 0.12);
+  outline: none;
+}
+
+#edit-meta-modal textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Custom QR Dropzone */
+.qr-upload-dropzone {
+  position: relative;
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 18px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qr-upload-dropzone:hover {
+  background: #f1f5f9;
+  border-color: var(--primary-color, #b32b2b);
+}
+
+.qr-file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.qr-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.qr-upload-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--primary-color, #b32b2b);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.qr-upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qr-upload-prompt {
+  font-size: 13px;
+  color: #334155;
+}
+
+.qr-upload-hint {
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.qr-file-selected-name {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 3px 10px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* Preview Box */
+.qr-preview-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: opacity 0.2s, filter 0.2s;
+}
+
+.qr-preview-header {
+  margin-bottom: 8px;
+}
+
+.qr-preview-img {
+  max-height: 140px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid #f1f5f9;
+}
+
+/* Custom Checkbox */
+.qr-remove-checkbox-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.custom-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color, #b32b2b);
+  cursor: pointer;
+  margin: 0;
+}
+
+.custom-checkbox-text {
+  font-size: 12.5px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.qr-note-text {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-style: italic;
+}

@@ -132,6 +132,27 @@ document.addEventListener("DOMContentLoaded", function() {
     // Set inputs in modal
     document.getElementById('edit-form-title-input').value = form.title;
     document.getElementById('edit-form-desc-input').value = form.description || '';
+
+    // Initialize QR code preview & states
+    const currentQrPreview = document.getElementById('edit-qr-preview-img');
+    const currentQrContainer = document.getElementById('edit-qr-preview-container');
+    const removeQrCheckbox = document.getElementById('edit-form-remove-qr');
+    const qrFileNameBadge = document.getElementById('qr-file-selected-name');
+    const qrFileInput = document.getElementById('edit-form-qr-input');
+    if (qrFileInput) qrFileInput.value = '';
+    if (qrFileNameBadge) {
+      qrFileNameBadge.style.display = 'none';
+      qrFileNameBadge.textContent = '';
+    }
+    if (removeQrCheckbox) removeQrCheckbox.checked = false;
+    if (form.qr_image_path && currentQrPreview && currentQrContainer) {
+      currentQrPreview.src = '../' + form.qr_image_path;
+      currentQrContainer.style.display = 'block';
+      currentQrContainer.style.opacity = '1';
+      currentQrContainer.style.filter = 'none';
+    } else if (currentQrContainer) {
+      currentQrContainer.style.display = 'none';
+    }
     
     // Build the editor based on sections
     editFormBuilderContainer.innerHTML = '';
@@ -325,16 +346,50 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (editQrInput) {
     editQrInput.addEventListener('change', function(e) {
+      const selectedNameEl = document.getElementById('qr-file-selected-name');
       if (this.files && this.files[0]) {
+        const file = this.files[0];
+        if (selectedNameEl) {
+          selectedNameEl.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+          selectedNameEl.style.display = 'inline-block';
+        }
         const reader = new FileReader();
         reader.onload = function(e) {
           editQrPreviewImg.src = e.target.result;
           editQrPreviewContainer.style.display = 'block';
+          editQrPreviewContainer.style.opacity = '1';
+          editQrPreviewContainer.style.filter = 'none';
         };
-        reader.readAsDataURL(this.files[0]);
+        reader.readAsDataURL(file);
       } else {
-        editQrPreviewContainer.style.display = 'none';
-        editQrPreviewImg.src = '';
+        if (selectedNameEl) {
+          selectedNameEl.style.display = 'none';
+          selectedNameEl.textContent = '';
+        }
+        if (currentFormDetails && currentFormDetails.qr_image_path) {
+          editQrPreviewImg.src = '../' + currentFormDetails.qr_image_path;
+          editQrPreviewContainer.style.display = 'block';
+        } else {
+          editQrPreviewContainer.style.display = 'none';
+          editQrPreviewImg.src = '';
+        }
+      }
+    });
+  }
+
+  const removeQrCheckbox = document.getElementById('edit-form-remove-qr');
+  if (removeQrCheckbox) {
+    removeQrCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        if (editQrPreviewContainer) {
+          editQrPreviewContainer.style.opacity = '0.35';
+          editQrPreviewContainer.style.filter = 'grayscale(100%)';
+        }
+      } else {
+        if (editQrPreviewContainer) {
+          editQrPreviewContainer.style.opacity = '1';
+          editQrPreviewContainer.style.filter = 'none';
+        }
       }
     });
   }
@@ -376,6 +431,14 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   document.getElementById('close-meta-modal-btn')?.addEventListener('click', () => {
     metaModal.style.display = 'none';
+  });
+  document.getElementById('close-meta-modal-x-btn')?.addEventListener('click', () => {
+    metaModal.style.display = 'none';
+  });
+  metaModal?.addEventListener('click', (e) => {
+    if (e.target === metaModal) {
+      metaModal.style.display = 'none';
+    }
   });
   document.getElementById('save-meta-modal-btn')?.addEventListener('click', () => {
     const titleInput = document.getElementById('edit-form-title-input');
