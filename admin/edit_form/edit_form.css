@@ -138,6 +138,8 @@
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #fee2e2;
 }
 
 .archived-sidebar-body .builder-question-card {
@@ -189,26 +191,58 @@
   margin-bottom: 12px;
   scroll-behavior: smooth;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #dc2626 #fee2e2;
 }
 
-/* Polished Modern Scrollbar */
-.edit-builder-scroll-area::-webkit-scrollbar {
-  width: 7px;
+/* Custom Red Scrollbar for Edit Form Builder & Archived Sidebar */
+.edit-builder-scroll-area::-webkit-scrollbar,
+.archived-sidebar-body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: block;
 }
 
-.edit-builder-scroll-area::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
+.edit-builder-scroll-area::-webkit-scrollbar-track,
+.archived-sidebar-body::-webkit-scrollbar-track {
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
 }
 
-.edit-builder-scroll-area::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-  transition: background 0.2s ease;
+.edit-builder-scroll-area::-webkit-scrollbar-thumb,
+.archived-sidebar-body::-webkit-scrollbar-thumb {
+  background-color: #dc2626;
+  border-radius: 8px;
+  border: 1.5px solid #fee2e2;
+  transition: background-color 0.2s ease;
 }
 
-.edit-builder-scroll-area::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.edit-builder-scroll-area::-webkit-scrollbar-thumb:hover,
+.archived-sidebar-body::-webkit-scrollbar-thumb:hover {
+  background-color: #991b1b;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-button,
+.archived-sidebar-body::-webkit-scrollbar-button {
+  display: block;
+  height: 8px;
+  width: 8px;
+  background-color: #fee2e2;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-button:single-button:vertical:decrement,
+.archived-sidebar-body::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><polygon points='4,1 7,6 1,6' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.edit-builder-scroll-area::-webkit-scrollbar-button:single-button:vertical:increment,
+.archived-sidebar-body::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'><polygon points='4,7 7,2 1,2' fill='%23dc2626'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .edit-builder-actions {
