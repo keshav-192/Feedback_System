@@ -112,11 +112,22 @@ document.addEventListener("DOMContentLoaded", function() {
     closeArchivedSidebar();
     currentFormId = null;
     loadFormsList();
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
 
   function showEditView(form) {
     formSelectView.style.display = 'none';
     editFormBuilderView.style.display = 'block';
+
+    // Ensure the page is scrolled to the absolute top so Title Card is immediately visible
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (editFormBuilderContainer) {
+      editFormBuilderContainer.scrollTop = 0;
+    }
     
     currentFormId = form.form_id;
     document.getElementById('edit-display-form-title').textContent = form.title;
@@ -277,6 +288,24 @@ document.addEventListener("DOMContentLoaded", function() {
         if (data.success) {
           showEditView(data.form);
           logEditAction('Opened Form for Editing', data.form.title);
+
+          // Guarantee view is scrolled to the absolute top so Title Card is visible
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            if (editFormBuilderContainer) {
+              editFormBuilderContainer.scrollTop = 0;
+            }
+          });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            if (editFormBuilderContainer) {
+              editFormBuilderContainer.scrollTop = 0;
+            }
+          }, 60);
         } else {
           Swal.fire('Error', data.message, 'error');
         }

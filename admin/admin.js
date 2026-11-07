@@ -111,6 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
           top: targetSection ? targetSection.offsetTop - 80 : 0,
           behavior: 'smooth'
         });
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
       }
     });
   });
