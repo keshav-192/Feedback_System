@@ -2002,5 +2002,23 @@
             }
         ],
         "group_id": "opt_grp_075"
+    },
+    {
+        "group_name": "Living",
+        "options": [
+            {
+                "label": "Hosteler",
+                "weight": 1
+            },
+            {
+                "label": "Day Scholar",
+                "weight": 1
+            },
+            {
+                "label": "PG",
+                "weight": 1
+            }
+        ],
+        "group_id": "opt_grp_076"
     }
 ]

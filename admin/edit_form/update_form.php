@@ -186,6 +186,12 @@ try {
         filter = :filter, active = :active, validation_type = :validation_type, max_length = :max_length 
         WHERE id = :id AND form_id = :form_id");
 
+    $ref_to_db_id = [];
+    foreach ($old_questions as $oldId => $oq) {
+        $ref_to_db_id[(string)$oldId] = (int)$oldId;
+        $ref_to_db_id['qid_' . $oldId] = (int)$oldId;
+    }
+
     foreach ($payload['sections'] as $sIndex => $section) {
         $step_no = $sIndex + 1;
         $section_name = isset($section['section_name']) && trim($section['section_name']) !== '' ? trim($section['section_name']) : null;
@@ -241,9 +247,21 @@ try {
                 $is_required = !empty($q['required']) ? 1 : 0;
                 $filter = !empty($q['is_filter']) ? 1 : 0;
                 $new_title = trim($q['text'] ?? '');
-                $depends_on_question_id = !empty($q['depends_on_question_id']) ? (int)$q['depends_on_question_id'] : null;
+                $client_uid = isset($q['client_uid']) ? trim($q['client_uid']) : null;
+                $dep_ref = !empty($q['depends_on_ref']) ? trim($q['depends_on_ref']) : (!empty($q['depends_on_question_id']) ? trim($q['depends_on_question_id']) : null);
                 $depends_on_value = isset($q['depends_on_value']) && trim($q['depends_on_value']) !== '' ? trim($q['depends_on_value']) : null;
                 $sub_section_name = isset($q['sub_section_name']) && trim($q['sub_section_name']) !== '' ? trim($q['sub_section_name']) : null;
+
+                $depends_on_question_id = null;
+                if ($dep_ref) {
+                    if (!isset($ref_to_db_id[$dep_ref])) {
+                        throw new Exception("Invalid question dependency: Parent question does not exist or appears after this block.");
+                    }
+                    $depends_on_question_id = $ref_to_db_id[$dep_ref];
+                    if (empty($depends_on_value)) {
+                        throw new Exception("Conditional sub-section matching value cannot be empty.");
+                    }
+                }
                 
                 if ($q_id) {
                     $old_q = $old_questions[$q_id] ?? null;
@@ -335,7 +353,10 @@ try {
                             'validation_type' => $validation_type,
                             'max_length' => $max_length
                         ]);
-                        $payload_question_ids[] = $pdo->lastInsertId();
+                        $fork_id = (int)$pdo->lastInsertId();
+                        $payload_question_ids[] = $fork_id;
+                        if ($client_uid) $ref_to_db_id[$client_uid] = $fork_id;
+                        $ref_to_db_id[(string)$fork_id] = $fork_id;
                     } else {
                         // Normal update
                         $payload_question_ids[] = $q_id;
@@ -357,6 +378,8 @@ try {
                             'id' => $q_id,
                             'form_id' => $form_id
                         ]);
+                        if ($client_uid) $ref_to_db_id[$client_uid] = (int)$q_id;
+                        $ref_to_db_id[(string)$q_id] = (int)$q_id;
                     }
                 } else {
                     // New Question
@@ -395,7 +418,10 @@ try {
                         'validation_type' => $validation_type,
                         'max_length' => $max_length
                     ]);
-                    $payload_question_ids[] = $pdo->lastInsertId();
+                    $new_id = (int)$pdo->lastInsertId();
+                    $payload_question_ids[] = $new_id;
+                    if ($client_uid) $ref_to_db_id[$client_uid] = $new_id;
+                    $ref_to_db_id[(string)$new_id] = $new_id;
                 }
             }
         }

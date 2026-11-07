@@ -53,7 +53,10 @@ try {
             'is_filter' => (bool)$q['filter'],
             'active' => (bool)$q['active'],
             'validation_type' => isset($q['validation_type']) ? $q['validation_type'] : 'alphanumeric',
-            'max_length' => isset($q['max_length']) ? $q['max_length'] : null
+            'max_length' => isset($q['max_length']) ? $q['max_length'] : null,
+            'depends_on_question_id' => !empty($q['depends_on_question_id']) ? (int)$q['depends_on_question_id'] : null,
+            'depends_on_value' => isset($q['depends_on_value']) ? $q['depends_on_value'] : null,
+            'sub_section_name' => isset($q['sub_section_name']) ? $q['sub_section_name'] : null
         ];
         
         if ($q['type'] === 'select' || $q['type'] === 'checkbox' || $q['type'] === 'radio') {
